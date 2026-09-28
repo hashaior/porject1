@@ -1,0 +1,60 @@
+.viewport {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+}
+
+.frame {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 480px;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-deep);
+}
+
+/* On larger screens, present the app as a device-sized card. */
+@media (min-width: 600px) and (min-height: 760px) {
+  .frame {
+    height: min(calc(100dvh - 48px), 920px);
+    border-radius: 44px;
+    border: 1px solid rgb(243 191 74 / 0.18);
+    box-shadow: 0 40px 90px rgb(0 8 16 / 0.6), 0 0 0 10px rgb(4 26 41 / 0.6);
+  }
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding-top: env(safe-area-inset-top);
+  /* Leave room for the floating dock. */
+  padding-bottom: calc(72px + 28px + env(safe-area-inset-bottom));
+  touch-action: pan-y;
+}
+
+.screen {
+  min-height: 100%;
+  animation: screen-in 360ms var(--ease-out);
+}
+
+.dock {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen {
+    animation: none;
+  }
+}

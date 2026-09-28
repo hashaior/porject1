@@ -1,0 +1,142 @@
+/*
+ * A floating sea-glass dock: deep-water translucency with a gold hairline,
+ * so it reads as part of the underwater scene rather than a system tab bar.
+ */
+.dock {
+  --item-width: calc(100% / 5);
+  position: relative;
+  height: 72px;
+  padding: 0 6px;
+  border-radius: var(--radius-dock);
+  background: var(--glass-fill);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight), inset 0 -10px 24px rgb(2 16 28 / 0.35), var(--glass-shadow);
+}
+
+/* Light catching the top edge of the glass. */
+.dock::before {
+  content: '';
+  position: absolute;
+  inset: -1px 28px auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(255 231 163 / 0.75), transparent);
+  pointer-events: none;
+}
+
+.list {
+  position: relative;
+  display: flex;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.indicator {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(6px + (100% - 12px) / 5 * var(--active-index));
+  width: calc((100% - 12px) / 5);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transition: inset-inline-start 420ms var(--ease-out);
+}
+
+/* Gold coin-like medallion behind the active icon. */
+.medallion {
+  margin-top: 9px;
+  width: 54px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(90% 120% at 50% 0%, rgb(255 255 255 / 0.45), transparent 55%),
+    var(--gold-fill);
+  box-shadow: var(--gold-edge), 0 0 18px rgb(243 191 74 / 0.45), 0 4px 10px rgb(1 12 22 / 0.45);
+}
+
+.link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  padding-top: 13px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: rgb(206 232 230 / 0.66);
+  outline: none;
+  transition: color 200ms ease;
+  touch-action: manipulation;
+}
+
+.link:hover {
+  color: rgb(236 248 246 / 0.92);
+}
+
+.link:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 260ms var(--ease-out), color 200ms ease;
+}
+
+.link:active .icon {
+  transform: scale(0.9);
+}
+
+.icon [data-fill] {
+  fill: currentColor;
+  fill-opacity: 0;
+  transition: fill-opacity 200ms ease;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.active {
+  color: var(--color-gold-light);
+  cursor: default;
+}
+
+.active:hover {
+  color: var(--color-gold-light);
+}
+
+.active .icon {
+  color: var(--color-text-on-gold);
+}
+
+.active .icon [data-fill] {
+  fill-opacity: 0.22;
+}
+
+.active .label {
+  font-weight: 600;
+  text-shadow: 0 0 12px rgb(243 191 74 / 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator,
+  .icon {
+    transition: none;
+  }
+}
