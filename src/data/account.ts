@@ -6,7 +6,7 @@ export const account = {
   balance: 1250,
 }
 
-const numberFormat = new Intl.NumberFormat('he-IL')
+const numberFormat = new Intl.NumberFormat('en-US')
 
 export function formatBalance(value: number): string {
   return numberFormat.format(value)

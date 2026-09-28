@@ -12,7 +12,7 @@ export function HomeScreen() {
 
   return (
     <div className={styles.home}>
-      <h1 className="visually-hidden">מסך הבית</h1>
+      <h1 className="visually-hidden">Home</h1>
       <header className={styles.topBar}>
         <BalanceHud
           balance={account.balance}

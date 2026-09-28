@@ -11,7 +11,7 @@ export function BottomNav() {
   return (
     <nav
       className={styles.dock}
-      aria-label="ניווט ראשי"
+      aria-label="Main navigation"
       style={{ '--active-index': activeIndex } as CSSProperties}
     >
       <span className={styles.indicator} aria-hidden="true">
@@ -26,13 +26,14 @@ export function BottomNav() {
                 to={tab.path}
                 className={isActive ? `${styles.link} ${styles.active}` : styles.link}
                 aria-current={isActive ? 'page' : undefined}
+                aria-label={tab.label}
+                title={tab.label}
                 // Tapping the tab you're already on must not trigger a navigation.
                 onClick={isActive ? (event) => event.preventDefault() : undefined}
               >
                 <span className={styles.icon}>
                   <NavIcon tab={tab.id} />
                 </span>
-                <span className={styles.label}>{tab.label}</span>
               </Link>
             </li>
           )

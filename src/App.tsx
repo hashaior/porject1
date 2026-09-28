@@ -10,19 +10,19 @@ export function App() {
         <Route index element={<HomeScreen />} />
         <Route
           path="wallet"
-          element={<SectionScreen title="ארנק" description="כאן ניתן יהיה לרכוש מוצרים במשחק, כמפורט באפיון מסך החנות." />}
+          element={<SectionScreen title="Wallet" description="Buy in-game items here, as defined in the store screen spec." />}
         />
         <Route
           path="games"
-          element={<SectionScreen title="משחקים" description="כאן ניתן יהיה ליצור משחקים ולהשתתף בהם, כמפורט באפיון מסך המשחקים." />}
+          element={<SectionScreen title="Games" description="Create and join games here, as defined in the games screen spec." />}
         />
         <Route
           path="more"
-          element={<SectionScreen title="עוד" description="אזור זה יוגדר בהמשך הפרויקט." />}
+          element={<SectionScreen title="More" description="This area will be defined later in the project." />}
         />
         <Route
           path="profile"
-          element={<SectionScreen title="פרופיל" description="כאן יוצגו פרטי המשתמש והגדרות החשבון, כמפורט באפיון מסך הפרופיל." />}
+          element={<SectionScreen title="Profile" description="Your details and account settings will appear here, as defined in the profile screen spec." />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

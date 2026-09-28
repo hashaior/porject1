@@ -1,6 +1,6 @@
 # porject1
 
-Mobile-first React + TypeScript app (Vite). RTL / Hebrew.
+Mobile-first React + TypeScript app (Vite).
 
 ```bash
 npm install

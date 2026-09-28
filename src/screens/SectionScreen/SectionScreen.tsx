@@ -20,7 +20,7 @@ export function SectionScreen({ title, description }: SectionScreenProps) {
         {title}
       </h1>
       <div className={styles.card}>
-        {isTopUp && <p className={styles.eyebrow}>הטענת יתרה</p>}
+        {isTopUp && <p className={styles.eyebrow}>Top up balance</p>}
         <p className={styles.body}>{description}</p>
       </div>
     </section>

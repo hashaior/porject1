@@ -30,7 +30,7 @@
   overflow-y: auto;
   padding-top: env(safe-area-inset-top);
   /* Leave room for the floating dock. */
-  padding-bottom: calc(72px + 28px + env(safe-area-inset-bottom));
+  padding-bottom: calc(64px + 28px + env(safe-area-inset-bottom));
   touch-action: pan-y;
 }
 

@@ -8,14 +8,13 @@ export interface TabConfig {
 
 /**
  * The five bottom-navigation destinations, in spec order (first = home).
- * The app is RTL, so the first tab renders at the right edge.
  */
 export const TABS: readonly TabConfig[] = [
-  { id: 'home', path: '/', label: 'בית' },
-  { id: 'wallet', path: '/wallet', label: 'ארנק' },
-  { id: 'games', path: '/games', label: 'משחקים' },
-  { id: 'more', path: '/more', label: 'עוד' },
-  { id: 'profile', path: '/profile', label: 'פרופיל' },
+  { id: 'home', path: '/', label: 'Home' },
+  { id: 'wallet', path: '/wallet', label: 'Wallet' },
+  { id: 'games', path: '/games', label: 'Games' },
+  { id: 'more', path: '/more', label: 'More' },
+  { id: 'profile', path: '/profile', label: 'Profile' },
 ]
 
 export function getTabIndex(pathname: string): number {

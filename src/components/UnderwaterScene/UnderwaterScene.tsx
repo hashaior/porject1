@@ -32,7 +32,7 @@ export function UnderwaterScene({ variant = 'hero' }: UnderwaterSceneProps) {
       <img
         className={styles.art}
         src={sceneUrl}
-        alt={isHero ? 'דמות האווטאר של המשחק — כריש בחלוק מחזיק שק מטבעות, בין חורבות עתיקות מתחת למים' : ''}
+        alt={isHero ? 'Game avatar: a robed shark holding a bag of coins among ancient underwater ruins' : ''}
         draggable={false}
         decoding="async"
       />

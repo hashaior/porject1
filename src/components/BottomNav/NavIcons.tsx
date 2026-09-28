@@ -7,8 +7,8 @@ function IconBase({ children, ...props }: SVGProps<SVGSVGElement> & { children: 
   return (
     <svg
       viewBox="0 0 24 24"
-      width="24"
-      height="24"
+      width="26"
+      height="26"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.8"

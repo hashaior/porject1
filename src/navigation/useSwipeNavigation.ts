@@ -16,8 +16,7 @@ interface SwipeStart {
 
 /**
  * Swipe left/right between the bottom-navigation screens.
- * Tabs are laid out RTL, so the next tab sits to the left: dragging the finger
- * rightwards moves forward, leftwards moves back.
+ * Swiping towards the reading-start edge moves forward (left in LTR, right in RTL).
  */
 export function useSwipeNavigation() {
   const navigate = useNavigate()

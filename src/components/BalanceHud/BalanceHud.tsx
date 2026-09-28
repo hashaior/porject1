@@ -43,16 +43,16 @@ export function BalanceHud({ balance, onBalanceClick, onTopUp }: BalanceHudProps
   const formatted = formatBalance(balance)
 
   return (
-    <div className={styles.hud} role="group" aria-label="ארנק">
+    <div className={styles.hud} role="group" aria-label="Wallet">
       <button
         type="button"
         className={styles.balance}
         onClick={onBalanceClick}
-        aria-label={`יתרה ${formatted} מטבעות`}
+        aria-label={`Balance ${formatted} coins`}
       >
         <CoinIcon />
         <span className={styles.balanceText}>
-          <span className={styles.caption}>יתרה</span>
+          <span className={styles.caption}>Balance</span>
           <span className={styles.amount}>{formatted}</span>
         </span>
       </button>
@@ -60,7 +60,7 @@ export function BalanceHud({ balance, onBalanceClick, onTopUp }: BalanceHudProps
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
           <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
         </svg>
-        <span>הטענה</span>
+        <span>Top up</span>
       </button>
     </div>
   )
