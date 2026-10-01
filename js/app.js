@@ -32,7 +32,7 @@
 
   // ---------- State ----------
   const STORE_KEY = 'sharko.demo.v1';
-  const state = { balance: 1250, owned: [], notifSeen: false };
+  const state = { balance: 1250, owned: [], notifSeen: false, name: 'CaptainOr' };
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
     if (saved) Object.assign(state, saved);
@@ -133,7 +133,8 @@
   let guideIdx = 0;
   let guideTimer;
   const renderGuide = (animate = true) => {
-    const [title, text] = GUIDE_LINES[guideIdx];
+    const [rawTitle, text] = GUIDE_LINES[guideIdx];
+    const title = rawTitle.replace('CaptainOr', state.name);
     const bubble = $('#guide-bubble');
     const apply = () => {
       $('#guide-title').textContent = title;
@@ -419,7 +420,12 @@
   window.addEventListener('hashchange', () => go(location.hash.slice(1)));
 
   // Shared helpers for the Results and Profile screens.
-  window.APP = { toast, go, refreshBalance: renderBalance, fmtBalance: () => fmt(state.balance) };
+  window.APP = {
+    toast, go, refreshBalance: renderBalance, fmtBalance: () => fmt(state.balance),
+    userName: () => state.name,
+    setUser(name) { state.name = name; save(); renderGuide(false); if (window.PS) PS.openProfile(); },
+    addCoins(n) { state.balance += n; save(); renderBalance(); },
+  };
 
   paintIcons();
   renderBalance();

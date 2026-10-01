@@ -14,6 +14,8 @@ npx http-server .
 
 ## Screens
 
+The app opens on a loading screen, then Sign in. From Sign in you can create an account (or continue as a guest). Signing out from Profile brings you back to Sign in.
+
 The bottom bar is the same on every screen:
 
 | Tab | Screen |
@@ -39,6 +41,7 @@ What works in the demo:
 - `css/results.css`, `css/profile.css` – the styles from `results-screen.html` and `profile-screen_1.html`, scoped to their screens
 - `js/data.js` – the demo data (teams, matches, results, items)
 - `js/app.js` – the app logic
+- `js/auth.js`, `css/auth.css` – loading, sign-in and create-account screens
 - `js/results.js`, `js/profile.js` – the Results and Profile screens, from the two design files
 - `assets/fonts/` – Lilita One, Manrope and Bungee, the fonts used in the designs
 - `assets/img/` – images. These were cut from the design screenshots, so they are low resolution. Replace them with the original artwork, keeping the same file names.

@@ -440,7 +440,7 @@ i[data-icon] svg { width: 100%; height: 100%; }
 .app-sheet .note { color: var(--muted); font-size: 12px; text-align: center; margin-top: 10px; font-weight: 600; }
 
 .toast {
-  position: absolute; z-index: 40; left: 50%; bottom: 100px; transform: translateX(-50%);
+  position: absolute; z-index: 60; left: 50%; bottom: 100px; transform: translateX(-50%);
   max-width: calc(100% - 32px); width: max-content; padding: 11px 16px; border-radius: 12px;
   background: var(--cream); color: var(--ink); font-size: 13px; font-weight: 800; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
   animation: toast 0.25s ease-out;

@@ -99,6 +99,8 @@
   try { Object.assign(STATE, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { /* use defaults */ }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(STATE)); } catch (e) { /* ignore */ } };
   const toast = (m) => window.APP && APP.toast(m);
+  const userName = () => (window.APP ? APP.userName() : 'CaptainOr');
+  const handle = () => userName().toLowerCase().replace(/[^a-z0-9]+/g, '_');
 
   /* ============ SCREEN 1 : PROFILE ============ */
   function profileHTML() {
@@ -114,8 +116,8 @@
       <div class="btn-gold swap">${I(P.swap, '#2B1A04', 20, 2.6)}</div>
       <div class="tap-hint"><svg width="24" height="20" viewBox="0 0 24 20"><path d="M22 2C14 2 8 8 4 16m0 0 6-1M4 16l-1-6" stroke="#F6D58A" stroke-width="2" fill="none" stroke-linecap="round"/></svg>TAP TO<br>CHANGE!</div>
     </div>
-    <div class="name"><h1>CaptainOr</h1><div class="pencil" onclick="PS.toast('Name editing is not part of this demo')">${I(P.pencil, '#F6D58A', 16, 2.4)}</div></div>
-    <div class="handle">@captain_or <span style="opacity:.4">•</span> <span class="flag">${israelFlag()} Israel</span> <span style="opacity:.4">•</span> ${a.kind} crew</div>
+    <div class="name"><h1>${userName()}</h1><div class="pencil" onclick="PS.toast('Name editing is not part of this demo')">${I(P.pencil, '#F6D58A', 16, 2.4)}</div></div>
+    <div class="handle">@${handle()} <span style="opacity:.4">•</span> <span class="flag">${israelFlag()} Israel</span> <span style="opacity:.4">•</span> ${a.kind} crew</div>
   </div>
 
 
@@ -138,14 +140,14 @@
 
   <div class="sec"><h2>MY DETAILS</h2><span class="link" style="display:flex;gap:4px;align-items:center">${I(P.pencil, '#F6D58A', 13, 2.6)} Edit</span></div>
   <div class="card details">
-    ${[['at', 'Username', '@captain_or'], ['mail', 'Email', 'or.captain@gmail.com'], ['phone', 'Phone', '+972 50-123-4567'], ['globe', 'Country', 'Israel'], ['shirt', 'Favorite team', 'Maccabi Tel Aviv'], ['cake', 'Birthday', '14 March 1998']].map(([i, k, v]) => `<div class="drow"><div class="di">${I(P[i], '#F6D58A', 17, 2.2)}</div><div class="grow"><div class="k">${k}</div><div class="v">${v}</div></div><span class="chev">›</span></div>`).join('')}
+    ${[['at', 'Username', '@' + handle()], ['mail', 'Email', 'or.captain@gmail.com'], ['phone', 'Phone', '+972 50-123-4567'], ['globe', 'Country', 'Israel'], ['shirt', 'Favorite team', 'Maccabi Tel Aviv'], ['cake', 'Birthday', '14 March 1998']].map(([i, k, v]) => `<div class="drow"><div class="di">${I(P[i], '#F6D58A', 17, 2.2)}</div><div class="grow"><div class="k">${k}</div><div class="v">${v}</div></div><span class="chev">›</span></div>`).join('')}
   </div>
 
   <div class="sec"><h2>ACHIEVEMENTS <span class="chip">3/12</span></h2><span class="link">See all ›</span></div>
   <div class="ach">
     ${medal('#F2B84B', '#B8741F', 'trophy', 'First Win')}${medal('#B98CFF', '#6A3FB5', 'flag', 'Party Host')}${medal('#FF8A5B', '#C9303A', 'target', '5 Win Streak')}${medal('#7FD8FF', '#2A6FC9', 'bag', 'Collector', true)}
   </div>
-  <div class="logout" onclick="PS.toast('Logged out (demo)')">${I(P.logout, '#FF8A8E', 18, 2.4)} Log out</div>
+  <div class="logout" onclick="AUTH.logout()">${I(P.logout, '#FF8A8E', 18, 2.4)} Log out</div>
   </div>`;
   }
   function medal(c1, c2, ic, label, locked) {
@@ -219,6 +221,9 @@
   window.PS = {
     toast,
     openProfile() { view = 'profile'; render(); },
+    animal: (k) => animal(k),
+    animalInfo: (k) => ANIMALS[k],
+    setAnimal(k) { STATE.animal = k; save(); render(); },
     openWardrobe() { view = 'wardrobe'; render(); },
     openPicker() { openSheet(pickerHTML(STATE.animal)); },
     openAdd() { openSheet(addHTML()); },
