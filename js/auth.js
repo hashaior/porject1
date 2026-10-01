@@ -53,7 +53,7 @@
         <div class="load-ver">v1.0.0 · DEMO BUILD</div>
       </div>`);
     const fast = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const total = fast ? 900 : 3600;
+    const total = fast ? 1200 : 5200;
     // Uneven speed so it feels like real loading: quick start, a pause, then a run to 100.
     const ease = (t) => (t < 0.45 ? t * 1.35 : t < 0.6 ? 0.6075 + (t - 0.45) * 0.4 : 0.6675 + (t - 0.6) * 0.83125);
     const start = performance.now();
@@ -66,34 +66,47 @@
       bar.setAttribute('aria-valuenow', v);
       tip.textContent = TIPS[Math.min(TIPS.length - 1, Math.floor(v / 25))];
       if (t < 1) requestAnimationFrame(step);
-      else setTimeout(() => { login(); hide('auth-loading'); }, 350);
+      else setTimeout(() => { login(); hide('auth-loading'); }, 600);
     };
     requestAnimationFrame(step);
   }
 
   /* ---------- Sign in ---------- */
   function login() {
-    const el = show('auth-login', `<img class="auth-bg" src="${BG}" alt="">${status}${logo}
-      <form class="login-sheet" id="login-form" novalidate>
-        <div class="plate">WELCOME BACK!</div>
-        <div class="field"><label for="li-name">Captain name or email</label>
-          <div class="input">${I(P.user)}<input id="li-name" autocomplete="username" placeholder="CaptainOr" value="${saved.remember && saved.name ? saved.name.replace(/"/g, '&quot;') : ''}"></div>
-          <div class="err" id="li-name-err"></div></div>
-        <div class="field"><label for="li-pass">Password</label>
-          <div class="input">${I(P.lock)}<input id="li-pass" type="password" autocomplete="current-password" placeholder="••••••••"><button type="button" class="eye" data-eye="li-pass" aria-label="Show password">${I(P.eye)}</button></div>
-          <div class="err" id="li-pass-err"></div></div>
-        <div class="row-between">
-          <label class="check"><input type="checkbox" id="li-remember" ${saved.remember !== false ? 'checked' : ''}>Remember me</label>
-          <button type="button" class="link" id="li-forgot">Forgot password?</button>
+    const shark = window.PS && PS.animal ? PS.animal(saved.animal || 'shark') : '';
+    const bubbles = Array.from({ length: 12 }, (_, i) => {
+      const size = 6 + ((i * 7) % 14);
+      return `<b style="left:${(i * 37) % 100}%;width:${size}px;height:${size}px;animation-duration:${7 + (i % 5) * 1.6}s;animation-delay:-${(i * 1.3) % 9}s"></b>`;
+    }).join('');
+    const el = show('auth-login', `<div class="rays"><i style="left:40px;width:60px;transform:rotate(18deg)"></i><i style="left:160px;width:40px;transform:rotate(12deg)"></i><i style="left:270px;width:70px;transform:rotate(8deg)"></i></div>
+      <div class="bubbles">${bubbles}</div>
+      <div class="login-scroll">${status}
+        <div class="login-hero">
+          <div class="hero-ring"><div class="inner">${shark}</div><span class="gem" style="left:-5px;top:50px"></span><span class="gem" style="right:-5px;top:30px"></span></div>
+          ${logo}
+          <p class="tagline">Watch together. Win together.</p>
         </div>
-        <button class="bigbtn" type="submit" id="li-go">${I(P.anchor, '#2B1A04', 22, 2.8)} SET SAIL</button>
-        <div class="divider">or</div>
-        <div class="alt">
-          <button type="button" class="altbtn teal" id="li-phone">${I(P.phone, '#fff', 18, 2.6)} PHONE</button>
-          <button type="button" class="altbtn purple" id="li-guest">${I(P.swords, '#fff', 18, 2.6)} GUEST</button>
-        </div>
+        <form class="login-form" id="login-form" novalidate>
+          <div class="plate">WELCOME BACK!</div>
+          <div class="field"><label for="li-name">Captain name or email</label>
+            <div class="input">${I(P.user)}<input id="li-name" autocomplete="username" placeholder="CaptainOr" value="${saved.remember && saved.name ? saved.name.replace(/"/g, '&quot;') : ''}"></div>
+            <div class="err" id="li-name-err"></div></div>
+          <div class="field"><label for="li-pass">Password</label>
+            <div class="input">${I(P.lock)}<input id="li-pass" type="password" autocomplete="current-password" placeholder="••••••••"><button type="button" class="eye" data-eye="li-pass" aria-label="Show password">${I(P.eye)}</button></div>
+            <div class="err" id="li-pass-err"></div></div>
+          <div class="row-between">
+            <label class="check"><input type="checkbox" id="li-remember" ${saved.remember !== false ? 'checked' : ''}>Remember me</label>
+            <button type="button" class="link" id="li-forgot">Forgot password?</button>
+          </div>
+          <button class="bigbtn" type="submit" id="li-go">${I(P.anchor, '#2B1A04', 22, 2.8)} SET SAIL</button>
+          <div class="divider">or</div>
+          <div class="alt">
+            <button type="button" class="altbtn teal" id="li-phone">${I(P.phone, '#fff', 18, 2.6)} PHONE</button>
+            <button type="button" class="altbtn purple" id="li-guest">${I(P.swords, '#fff', 18, 2.6)} GUEST</button>
+          </div>
+        </form>
         <div class="switch-line">New to the crew? <button type="button" class="link" id="li-signup">Create account ›</button></div>
-      </form>`);
+      </div>`);
     wireEyes(el);
     $('#li-forgot', el).onclick = () => toast('Reset link sent to your email (demo)');
     $('#li-phone', el).onclick = () => toast('Phone sign-in is not part of this demo');
@@ -110,7 +123,7 @@
       if (!showErrors(el, errs)) return;
       const remember = $('#li-remember', el).checked;
       const display = name.includes('@') ? name.split('@')[0] : name;
-      store({ name, remember });
+      store({ ...saved, name, remember });
       busy($('#li-go', el), 'BOARDING…', () => enter(display.slice(0, 16), `Welcome back, ${display.slice(0, 16)}!`));
     };
   }
@@ -146,7 +159,7 @@
           </div>
 
           <div class="su-sec">FAVORITE TEAM</div>
-          <div class="teams" id="su-teams"></div>
+          <div class="su-teams" id="su-teams"></div>
 
           <label class="check terms"><input type="checkbox" id="su-terms"><span>I am 18 or older and agree to the Terms and Privacy Policy</span></label>
           <div class="err" id="su-terms-err" style="margin:6px 20px 0"></div>
@@ -158,11 +171,11 @@
       $('#su-crew', el).innerHTML = CREW.map((k) => `<div class="cp ${k === su.animal ? 'sel' : ''}" data-k="${k}"><div class="pa">${avatar(k)}</div><span>${kind(k)}</span>${k === su.animal ? `<div class="tick">${I(P.check, '#fff', 12, 3.4)}</div>` : ''}</div>`).join('');
     };
     const renderTeams = () => {
-      $('#su-teams', el).innerHTML = TEAMS.map(([k, n, c, t]) => `<button type="button" class="team ${k === su.team ? 'on' : ''}" data-k="${k}"><i style="background:${c};color:${t}">${k}</i>${n}</button>`).join('');
+      $('#su-teams', el).innerHTML = TEAMS.map(([k, n, c, t]) => `<button type="button" class="su-team ${k === su.team ? 'on' : ''}" data-k="${k}"><i style="background:${c};color:${t}">${k}</i>${n}</button>`).join('');
     };
     renderCrew(); renderTeams(); wireEyes(el);
     $('#su-crew', el).onclick = (e) => { const c = e.target.closest('.cp'); if (c) { su.animal = c.dataset.k; renderCrew(); } };
-    $('#su-teams', el).onclick = (e) => { const c = e.target.closest('.team'); if (c) { su.team = c.dataset.k; renderTeams(); } };
+    $('#su-teams', el).onclick = (e) => { const c = e.target.closest('.su-team'); if (c) { su.team = c.dataset.k; renderTeams(); } };
     $('#su-back', el).onclick = () => hide('auth-signup');
     $('#su-login', el).onclick = () => hide('auth-signup');
     $('#su-pass', el).oninput = (e) => strength(el, e.target.value);
@@ -184,6 +197,7 @@
       store({ name, remember: true });
       busy($('#su-go', el), 'CREATING…', () => {
         if (window.PS && PS.setAnimal) PS.setAnimal(su.animal);
+        store({ name, remember: true, animal: su.animal });
         APP.addCoins(500);
         hide('auth-signup');
         enter(name, `Welcome aboard, ${name}! +500 coins`);
