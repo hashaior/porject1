@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b222b">
 <title>Sharko Matches</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Manrope:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -19,32 +16,23 @@
 
   <!-- HOME -->
   <section class="screen screen-home is-active" id="screen-home" data-screen="home">
-    <div class="home-scene" aria-hidden="true">
-      <img class="home-scene-blur" src="assets/img/shark.jpg" alt="">
+    <img class="home-bg" src="assets/img/home-bg.jpg" alt="">
+    <div class="balance" data-balance></div>
+    <button class="bell" id="bell-btn" aria-label="Notifications">
+      <i data-icon="bell"></i><span class="badge" id="bell-badge">3</span>
+    </button>
+    <div class="bubble" id="guide-bubble" aria-live="polite">
+      <div class="swap-wrap"><strong id="guide-title"></strong><p id="guide-text"></p></div>
+      <svg class="bubble-tail" viewBox="0 0 46 24" aria-hidden="true"><path d="M14 0 L6 20 L30 18 L44 0 Z" fill="#fdf6e6"/><path d="M14 1.5 L6 20 L30 18 L43 1.5" fill="none" stroke="#1d1a2e" stroke-width="3" stroke-linejoin="round"/></svg>
     </div>
-    <header class="topbar">
-      <div class="balance" data-balance></div>
-      <button class="icon-btn bell" id="bell-btn" aria-label="Notifications">
-        <i data-icon="bell"></i><span class="badge" id="bell-badge">3</span>
-      </button>
-    </header>
-    <div class="home-stage">
-      <img class="shark" src="assets/img/shark.jpg" alt="Sharko, your guide">
-      <div class="bubble" id="guide-bubble" aria-live="polite">
-        <strong id="guide-title"></strong>
-        <p id="guide-text"></p>
-      </div>
-      <button class="carousel-arrow left" id="guide-prev" aria-label="Previous tip"><i data-icon="chev-left"></i></button>
-      <button class="carousel-arrow right" id="guide-next" aria-label="Next tip"><i data-icon="chev-right"></i></button>
-    </div>
-    <div class="home-cta">
-      <div class="guide-badge"><span>Your guide</span><b>Sharko</b></div>
-      <button class="btn-gold play-btn" data-go="matches">
-        <i data-icon="swords"></i> Play now
-        <span class="live-pill"><span class="live-dot"></span>Live</span>
-      </button>
-      <div class="dots" id="guide-dots"></div>
-    </div>
+    <button class="carousel-arrow left" id="guide-prev" aria-label="Previous tip"><i data-icon="chev-left"></i></button>
+    <button class="carousel-arrow right" id="guide-next" aria-label="Next tip"><i data-icon="chev-right"></i></button>
+    <div class="guide-badge"><span>Your guide</span><b>Sharko</b></div>
+    <button class="btn-gold play-btn" data-go="matches">
+      <i data-icon="swords"></i>Play now
+      <span class="live-pill"><span class="live-dot"></span>LIVE</span>
+    </button>
+    <div class="dots" id="guide-dots"></div>
   </section>
 
   <!-- MARKET -->
@@ -131,6 +119,7 @@
     </div>
   </section>
 
+  <div class="nav-fade" aria-hidden="true"></div>
   <!-- BOTTOM NAV (same on every screen) -->
   <nav class="tabbar" id="tabbar" aria-label="Main">
     <button data-go="home" class="is-active" aria-label="Home"><i data-icon="home"></i></button>

@@ -4,7 +4,7 @@ A clickable demo of the app built from the design screens. All data is fake and 
 
 ## Run it
 
-Open `index.html` in a browser. On a computer it shows inside a phone frame; on a phone it fills the screen.
+Open `index.html` in a browser. The app is laid out on a fixed 390 × 844 phone canvas measured from the design files and scaled to fit the window. On a computer it shows inside a phone frame.
 
 Or serve the folder:
 
@@ -37,4 +37,6 @@ What works in the demo:
 - `css/style.css` – styles
 - `js/data.js` – the demo data (teams, matches, results, items)
 - `js/app.js` – the app logic
+- `assets/fonts/` – Lilita One and Manrope, the two fonts used in the designs
 - `assets/img/` – images. These were cut from the design screenshots, so they are low resolution. Replace them with the original artwork, keeping the same file names.
+  - `home-bg.jpg` is the full Home design. The live buttons and texts sit exactly on top of the drawn ones. With a clean background image (no buttons in it) the result will be sharper.

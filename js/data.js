@@ -12,20 +12,24 @@ const LEAGUES = {
 // abbr, name, color, text color, stadium
 const TEAMS = {
   LIV: ['Liverpool', '#c8102e', '#fff', 'Anfield, Liverpool'],
-  MCI: ['Man City', '#6cabdd', '#fff', 'Etihad Stadium, Manchester'],
+  MCI: ['Man City', '#7ec3ee', '#fff', 'Etihad Stadium, Manchester'],
   ARS: ['Arsenal', '#ef0107', '#fff', 'Emirates Stadium, London'],
   CHE: ['Chelsea', '#034694', '#fff', 'Stamford Bridge, London'],
   MUN: ['Man United', '#da291c', '#fff', 'Old Trafford, Manchester'],
   TOT: ['Tottenham', '#f4f4f4', '#132257', 'Tottenham Hotspur Stadium, London'],
   NEW: ['Newcastle', '#2b2b2b', '#fff', "St James' Park, Newcastle"],
   AVL: ['Aston Villa', '#670e36', '#fff', 'Villa Park, Birmingham'],
-  RMA: ['Real Madrid', '#f4f4f4', '#1a2b5c', 'Santiago Bernabéu, Madrid'],
-  BAR: ['Barcelona', '#a50044', '#fff', 'Spotify Camp Nou, Barcelona'],
+  WHU: ['West Ham', '#7a263a', '#fff', 'London Stadium, London'],
+  EVE: ['Everton', '#003399', '#fff', 'Goodison Park, Liverpool'],
+  BHA: ['Brighton', '#0057b8', '#fff', 'Amex Stadium, Brighton'],
+  CRY: ['Crystal Palace', '#1b458f', '#fff', 'Selhurst Park, London'],
+  RMA: ['Real Madrid', '#f4f4f4', '#22336b', 'Santiago Bernabéu, Madrid'],
+  BAR: ['Barcelona', '#8a2a6e', '#fff', 'Spotify Camp Nou, Barcelona'],
   ATM: ['Atlético', '#cb3524', '#fff', 'Metropolitano, Madrid'],
   SEV: ['Sevilla', '#f4f4f4', '#d81920', 'Sánchez-Pizjuán, Seville'],
   RSO: ['Real Sociedad', '#0067b1', '#fff', 'Anoeta, San Sebastián'],
   VIL: ['Villarreal', '#ffe667', '#5a4a00', 'La Cerámica, Villarreal'],
-  MTA: ['Maccabi TA', '#ffd200', '#1a2a6c', 'Bloomfield, Tel Aviv'],
+  MTA: ['Maccabi TA', '#f5c400', '#1a2a6c', 'Bloomfield, Tel Aviv'],
   HBS: ["H. Be'er Sheva", '#d71920', '#fff', "Turner Stadium, Be'er Sheva"],
   MHA: ['Maccabi Haifa', '#00a650', '#fff', 'Sammy Ofer, Haifa'],
   HTA: ['Hapoel TA', '#e30613', '#fff', 'Bloomfield, Tel Aviv'],
@@ -42,39 +46,48 @@ const TEAMS = {
   RBL: ['Leipzig', '#f4f4f4', '#dd0741', 'Red Bull Arena, Leipzig'],
 };
 
-// [league, home, away, days from today, kickoff]
-const FIXTURES = [
+// The first three cards are exactly the ones in the design.
+// 'sat' / 'sun' mean the coming Saturday / Sunday.
+const FEATURED = [
   ['epl', 'LIV', 'MCI', 0, '21:00'],
-  ['laliga', 'RMA', 'BAR', 0, '22:00'],
-  ['ligat', 'MTA', 'HBS', 0, '20:30'],
-  ['seriea', 'INT', 'MIL', 0, '21:45'],
-  ['epl', 'ARS', 'CHE', 1, '19:30'],
-  ['bundes', 'FCB', 'BVB', 1, '19:30'],
-  ['ligat', 'MHA', 'HTA', 1, '20:00'],
-  ['ucl', 'MCI', 'RMA', 1, '22:00'],
-  ['laliga', 'ATM', 'SEV', 2, '21:00'],
-  ['epl', 'MUN', 'TOT', 2, '18:30'],
-  ['seriea', 'JUV', 'NAP', 2, '21:45'],
-  ['ligat', 'BEI', 'HHA', 2, '19:00'],
-  ['ucl', 'BAR', 'FCB', 3, '22:00'],
-  ['epl', 'NEW', 'AVL', 3, '17:00'],
-  ['bundes', 'B04', 'RBL', 3, '16:30'],
-  ['laliga', 'RSO', 'VIL', 4, '20:00'],
-  ['epl', 'CHE', 'LIV', 4, '17:30'],
-  ['ligat', 'HBS', 'MHA', 4, '20:30'],
-  ['seriea', 'ROM', 'INT', 5, '20:45'],
-  ['epl', 'TOT', 'ARS', 5, '16:30'],
-  ['ucl', 'LIV', 'INT', 5, '22:00'],
-  ['ligat', 'HTA', 'MTA', 6, '21:00'],
-  ['laliga', 'BAR', 'ATM', 6, '21:00'],
-  ['bundes', 'BVB', 'B04', 6, '18:30'],
-  ['epl', 'MCI', 'MUN', 8, '17:30'],
-  ['seriea', 'MIL', 'JUV', 8, '20:45'],
-  ['ligat', 'MTA', 'BEI', 9, '20:00'],
-  ['laliga', 'SEV', 'RMA', 9, '21:00'],
-  ['ucl', 'ARS', 'JUV', 10, '22:00'],
-  ['bundes', 'RBL', 'FCB', 10, '18:30'],
+  ['laliga', 'RMA', 'BAR', 'sat', '22:00'],
+  ['ligat', 'MTA', 'HBS', 'sun', '20:30'],
 ];
+
+// The rest is generated so the totals match the design:
+// 128 matches in total, and 24 Premier League matches this week.
+const POOLS = {
+  epl: ['ARS', 'CHE', 'MUN', 'TOT', 'NEW', 'AVL', 'WHU', 'EVE', 'BHA', 'CRY', 'LIV', 'MCI'],
+  laliga: ['ATM', 'SEV', 'RSO', 'VIL', 'RMA', 'BAR'],
+  ligat: ['MHA', 'HTA', 'BEI', 'HHA', 'MTA', 'HBS'],
+  seriea: ['INT', 'MIL', 'JUV', 'NAP', 'ROM'],
+  bundes: ['FCB', 'BVB', 'B04', 'RBL'],
+  ucl: ['RMA', 'MCI', 'INT', 'FCB', 'BAR', 'LIV', 'ARS', 'JUV'],
+};
+// [league, list of day offsets (one entry per match)]
+const SCHEDULE = [
+  ['epl', [0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7, 9, 9, 9, 11, 11, 11, 13, 13, 13]],
+  ['laliga', [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 12, 13]],
+  ['ligat', [0, 1, 1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 8, 9, 10, 11, 12, 12, 13]],
+  ['seriea', [0, 1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 9, 10, 11, 11, 12, 13, 13]],
+  ['bundes', [1, 1, 2, 3, 4, 5, 5, 6, 7, 8, 8, 9, 10, 11, 12, 12, 13, 13]],
+  ['ucl', [1, 1, 2, 2, 8, 8, 9, 9, 13, 13, 13, 13]],
+];
+const KICKOFFS = ['16:30', '17:00', '18:30', '19:00', '19:45', '20:00', '20:30', '21:00', '21:45', '22:00'];
+
+const FIXTURES = (() => {
+  const out = FEATURED.slice();
+  SCHEDULE.forEach(([league, days], li) => {
+    const pool = POOLS[league];
+    days.forEach((day, i) => {
+      const home = pool[i % pool.length];
+      let away = pool[(i + 1 + Math.floor(i / pool.length)) % pool.length];
+      if (away === home) away = pool[(i + 2) % pool.length];
+      out.push([league, home, away, day, KICKOFFS[(i * 3 + li) % KICKOFFS.length]]);
+    });
+  });
+  return out;
+})();
 
 // Finished parties. [league, home, away, days ago, home score, away score, your pick, players, coins +/-]
 const RESULTS = [
@@ -106,10 +119,10 @@ const COIN_PACKS = [
 
 const GUIDE_LINES = [
   ['Ahoy, CaptainOr!', 'Big matches tonight. Grab your crew and start a party!'],
-  ['Liverpool vs Man City', 'Kicks off at 21:00. 6 lobbies are already filling up.'],
-  ['Daily Deals are in', 'Fresh gear in the Market. New deals drop at midnight.'],
-  ['Your crew is waiting', 'Noa and Dan just joined a lobby for El Clásico.'],
-  ['Streak bonus', 'Win 2 more parties this week for +300 coins.'],
+  ['Liverpool vs City', 'Kick-off at 21:00. Six lobbies are filling up!'],
+  ['Daily Deals are in!', 'Fresh gear in the Market. Go take a look!'],
+  ['Your crew is here!', 'Noa and Dan just joined a lobby. Jump in!'],
+  ['Win streak bonus!', 'Win 2 more parties this week for +300 coins.'],
 ];
 
 const NOTIFICATIONS = [

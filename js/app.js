@@ -74,6 +74,7 @@
     $$('#tabbar button').forEach((b) => b.classList.toggle('is-active', b.dataset.go === name));
     const scr = $(`#screen-${name}`);
     if (scr) scr.scrollTop = 0;
+    $('#phone').classList.toggle('on-home', name === 'home');
     if (location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
   };
 
@@ -185,14 +186,20 @@
   const leagueTag = (key) => `<span class="league" style="--dot:${LEAGUES[key].color}">${esc(LEAGUES[key].name)}</span>`;
 
   // ---------- Matches ----------
-  const MATCHES = FIXTURES.map(([league, home, away, offset, time], id) => ({
-    id, league, home, away, offset, time, venue: TEAMS[home][3],
-  }));
+  const nextWeekday = (dow) => (dow - new Date().getDay() + 7) % 7;
+  const resolveDay = (d) => (d === 'sat' ? nextWeekday(6) : d === 'sun' ? nextWeekday(0) : d);
+  const MATCHES = FIXTURES
+    .map(([league, home, away, day, time], i) => ({ league, home, away, offset: resolveDay(day), time, venue: TEAMS[home][3], featured: i < FEATURED.length, order: i }))
+    .sort((a, b) => (b.featured - a.featured) || (a.featured ? a.order - b.order : (a.offset - b.offset) || a.time.localeCompare(b.time)))
+    .map((m, id) => ({ ...m, id }));
   const COUNTRIES = ['England', 'Spain', 'Israel', 'Italy', 'Germany'];
-  const LEAGUE_KEYS = ['epl', 'laliga', 'ligat', 'seriea', 'bundes', 'ucl'];
+  // Same buttons as the design (Bundesliga matches still show under Germany).
+  const LEAGUE_KEYS = ['epl', 'laliga', 'ligat', 'seriea', 'ucl'];
   const WHEN = [['today', 'Today'], ['tomorrow', 'Tomorrow'], ['week', 'This week'], ['any', 'Any time']];
 
   const filters = { country: new Set(), league: new Set(), when: 'any' };
+  // The first time the panel opens it shows the example selection from the design.
+  let firstOpen = true;
   let draft = null;
   let query = '';
 
@@ -242,9 +249,10 @@
   const openFilters = () => {
     const screen = $('#screen-matches');
     screen.scrollTop = 0;
-    draft = { country: new Set(filters.country), league: new Set(filters.league), when: filters.when };
-    const row = $('.search-row', screen);
-    $('#filter-panel').style.top = `${row.offsetTop + row.offsetHeight + 12}px`;
+    draft = firstOpen
+      ? { country: new Set(['England', 'Israel']), league: new Set(['epl']), when: 'week' }
+      : { country: new Set(filters.country), league: new Set(filters.league), when: filters.when };
+    firstOpen = false;
     renderFilterPanel();
     $('#filter-panel').hidden = false;
     $('#filter-scrim').hidden = false;
@@ -429,6 +437,19 @@
     $('#set-reminders').addEventListener('change', (e) => toast(e.target.checked ? 'Match reminders on' : 'Match reminders off'));
     $('#set-sound').addEventListener('change', (e) => toast(e.target.checked ? 'Sound effects on' : 'Sound effects off'));
   };
+
+  // ---------- Fit the 390 x 844 phone canvas to the window ----------
+  const fit = () => {
+    const phone = $('#phone');
+    const framed = innerWidth >= 600 && innerHeight >= 500;
+    phone.classList.toggle('framed', framed);
+    const pad = framed ? 56 : 0;
+    let s = Math.min((innerWidth - pad) / 390, (innerHeight - pad) / 844);
+    if (framed) s = Math.min(1, s);
+    phone.style.transform = `scale(${s})`;
+  };
+  window.addEventListener('resize', fit);
+  fit();
 
   // ---------- Global wiring ----------
   document.addEventListener('click', (e) => {
