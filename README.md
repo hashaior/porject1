@@ -21,22 +21,25 @@ The bottom bar is the same on every screen:
 | Home | Home with Sharko the guide, tips carousel, Play Now |
 | Wallet | Market with Daily Deals (each price shows once) |
 | Swords | Matches with search, filters and Create Lobby |
-| Grid | Results of finished parties |
-| Profile | Profile, collection, crew and settings |
+| Grid | Results: final scores with expandable match details, league and day filters |
+| Profile | Profile with avatar picker, Add Friends and Wardrobe |
 
 What works in the demo:
 - Top up adds coins to the balance
 - Create Lobby takes the entry coins and creates a lobby code
-- Buying a Market item adds it to your Profile collection
+- Profile: pick an animal avatar, equip hats and glasses in the Wardrobe (saved in the browser)
+- Results: tap a match to expand it, filter by league or day
 - The filters and search on Matches update the list and the count
 - Balance and purchases are saved in the browser (localStorage)
 
 ## Files
 
 - `index.html` – the screens
-- `css/style.css` – styles
+- `css/style.css` – styles for Home, Market, Matches and shared parts
+- `css/results.css`, `css/profile.css` – the styles from `results-screen.html` and `profile-screen_1.html`, scoped to their screens
 - `js/data.js` – the demo data (teams, matches, results, items)
 - `js/app.js` – the app logic
-- `assets/fonts/` – Lilita One and Manrope, the two fonts used in the designs
+- `js/results.js`, `js/profile.js` – the Results and Profile screens, from the two design files
+- `assets/fonts/` – Lilita One, Manrope and Bungee, the fonts used in the designs
 - `assets/img/` – images. These were cut from the design screenshots, so they are low resolution. Replace them with the original artwork, keeping the same file names.
   - `home-bg.jpg` is the full Home design. The live buttons and texts sit exactly on top of the drawn ones. With a clean background image (no buttons in it) the result will be sharper.

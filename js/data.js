@@ -89,18 +89,6 @@ const FIXTURES = (() => {
   return out;
 })();
 
-// Finished parties. [league, home, away, days ago, home score, away score, your pick, players, coins +/-]
-const RESULTS = [
-  ['ligat', 'MHA', 'MTA', 1, 2, 1, 'MHA', 6, 450],
-  ['epl', 'ARS', 'LIV', 2, 1, 1, 'LIV', 8, -200],
-  ['laliga', 'BAR', 'SEV', 3, 3, 0, 'BAR', 5, 620],
-  ['seriea', 'NAP', 'ROM', 4, 0, 2, 'NAP', 4, -150],
-  ['ucl', 'RMA', 'INT', 6, 2, 2, 'DRAW', 10, 900],
-  ['bundes', 'BVB', 'FCB', 7, 1, 3, 'FCB', 6, 310],
-  ['epl', 'MCI', 'CHE', 9, 4, 1, 'MCI', 7, 280],
-  ['ligat', 'HBS', 'HTA', 11, 0, 1, 'HBS', 5, -250],
-];
-
 const DEALS = [
   { id: 'helmet', name: 'Aviator Cap', img: 'assets/img/item-helmet.jpg', price: '$4.99 USD' },
   { id: 'monocle', name: 'Golden Monocle', img: 'assets/img/item-monocle.jpg', price: '$4.99 USD' },

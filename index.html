@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#0b222b">
 <title>Sharko Matches</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/results.css">
+<link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
 <div class="phone" id="phone">
@@ -73,51 +75,11 @@
     </div>
   </section>
 
-  <!-- RESULTS -->
-  <section class="screen screen-results" id="screen-results" data-screen="results">
-    <header class="topbar"><div class="balance" data-balance></div></header>
-    <div class="page-head">
-      <h1 class="page-title">Results</h1>
-      <p class="page-sub">How your parties finished</p>
-    </div>
-    <div class="summary" id="results-summary"></div>
-    <div class="segmented" id="results-tabs" role="tablist">
-      <button role="tab" data-tab="all" class="is-active">All</button>
-      <button role="tab" data-tab="won">Won</button>
-      <button role="tab" data-tab="lost">Lost</button>
-    </div>
-    <div class="card-list" id="results-list"></div>
-  </section>
+  <!-- RESULTS (from results-screen.html, rendered by js/results.js) -->
+  <section class="screen screen-results" id="screen-results" data-screen="results"></section>
 
-  <!-- PROFILE -->
-  <section class="screen screen-profile" id="screen-profile" data-screen="profile">
-    <header class="topbar"><div class="balance" data-balance></div></header>
-    <div class="profile-card">
-      <div class="avatar"><span>CO</span><b class="lvl">12</b></div>
-      <h1 class="profile-name">CaptainOr</h1>
-      <p class="profile-handle">@captainor · Sailing since Mar 2026</p>
-      <div class="xp">
-        <div class="xp-row"><span>Level 12</span><span>2,340 / 3,000 XP</span></div>
-        <div class="xp-bar"><i style="width:78%"></i></div>
-      </div>
-    </div>
-    <div class="stats">
-      <div><b>48</b><span>Parties</span></div>
-      <div><b>62%</b><span>Win rate</span></div>
-      <div><b>18,450</b><span>Coins won</span></div>
-    </div>
-    <div class="section-label">Collection <span class="count-pill" id="collection-count">0</span></div>
-    <div class="collection" id="collection"></div>
-    <div class="section-label">Your crew <span class="count-pill" id="crew-count">0</span></div>
-    <div class="crew" id="crew"></div>
-    <div class="settings">
-      <label class="setting"><span><i data-icon="bell"></i>Match reminders</span><input type="checkbox" id="set-reminders" class="switch" checked></label>
-      <label class="setting"><span><i data-icon="volume"></i>Sound effects</span><input type="checkbox" id="set-sound" class="switch" checked></label>
-      <button class="setting" data-toast="Language: English (Hebrew coming soon)"><span><i data-icon="globe"></i>Language</span><em>English <i data-icon="chev-right"></i></em></button>
-      <button class="setting" data-toast="Support is a demo in this build"><span><i data-icon="help"></i>Help &amp; support</span><em><i data-icon="chev-right"></i></em></button>
-      <button class="setting danger" data-toast="Logged out (demo)"><span><i data-icon="logout"></i>Log out</span></button>
-    </div>
-  </section>
+  <!-- PROFILE (from profile-screen_1.html, rendered by js/profile.js) -->
+  <section class="screen screen-profile" id="screen-profile" data-screen="profile"></section>
 
   <div class="nav-fade" aria-hidden="true"></div>
   <!-- BOTTOM NAV (same on every screen) -->
@@ -132,12 +94,14 @@
 
   <!-- Overlays -->
   <div class="popover" id="notif-pop" hidden></div>
-  <div class="sheet-scrim" id="sheet-scrim" hidden></div>
-  <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true"><div class="sheet-handle"></div><div id="sheet-body"></div></div>
+  <div class="app-sheet-scrim" id="sheet-scrim" hidden></div>
+  <div class="app-sheet" id="sheet" hidden role="dialog" aria-modal="true"><div class="app-sheet-handle"></div><div id="sheet-body"></div></div>
   <div class="toast" id="toast" hidden></div>
 </div>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="js/results.js"></script>
+<script src="js/profile.js"></script>
 </body>
 </html>

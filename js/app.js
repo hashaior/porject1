@@ -62,6 +62,7 @@
         <span class="balance-text"><small>Balance</small><b>${fmt(state.balance)}</b></span>
         <button class="btn-gold topup" data-action="topup">+ Top up</button>`;
     });
+    $$('[data-bal-num]').forEach((el) => { el.textContent = fmt(state.balance); });
     paintIcons();
   };
 
@@ -73,8 +74,9 @@
     $$('.screen').forEach((s) => s.classList.toggle('is-active', s.dataset.screen === name));
     $$('#tabbar button').forEach((b) => b.classList.toggle('is-active', b.dataset.go === name));
     const scr = $(`#screen-${name}`);
-    if (scr) scr.scrollTop = 0;
+    if (scr) { scr.scrollTop = 0; const inner = $('.scroll', scr); if (inner) inner.scrollTop = 0; }
     $('#phone').classList.toggle('on-home', name === 'home');
+    $('#phone').classList.toggle('own-status', name === 'results' || name === 'profile');
     if (location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
   };
 
@@ -87,7 +89,10 @@
     if (onMount) onMount($('#sheet-body'));
   };
   const closeSheet = () => { $('#sheet').hidden = true; $('#sheet-scrim').hidden = true; };
-  const closeOverlays = () => { closeSheet(); closeFilters(false); $('#notif-pop').hidden = true; };
+  const closeOverlays = () => {
+    closeSheet(); closeFilters(false); $('#notif-pop').hidden = true;
+    $$('.screen .dim, .screen .sheet').forEach((n) => n.remove());
+  };
 
   // ---------- Top up ----------
   const openTopUp = () => {
@@ -363,7 +368,7 @@
       const b = $('[data-buy]', body);
       if (owned) return;
       b.addEventListener('click', () => {
-        state.owned.push(d.id); save(); closeSheet(); renderMarket(); renderProfile();
+        state.owned.push(d.id); save(); closeSheet(); renderMarket();
         toast(`${d.name} added to your collection`);
       });
     });
@@ -384,58 +389,6 @@
     });
     tickDealsTimer();
     setInterval(tickDealsTimer, 1000);
-  };
-
-  // ---------- Results ----------
-  let resultsTab = 'all';
-  const renderResults = () => {
-    const won = RESULTS.filter((r) => r[8] > 0);
-    const net = RESULTS.reduce((a, r) => a + r[8], 0);
-    $('#results-summary').innerHTML = `
-      <div><b class="pos">${won.length}</b><span>Won</span></div>
-      <div><b class="neg">${RESULTS.length - won.length}</b><span>Lost</span></div>
-      <div><b class="${net >= 0 ? 'pos' : 'neg'}">${net >= 0 ? '+' : '−'}${fmt(Math.abs(net))}</b><span>Net coins</span></div>`;
-    const list = RESULTS.filter((r) => resultsTab === 'all' || (resultsTab === 'won' ? r[8] > 0 : r[8] < 0));
-    $('#results-list').innerHTML = list.map(([league, home, away, ago, hs, as, pick, players, coins]) => {
-      const win = coins > 0;
-      const pickName = pick === 'DRAW' ? 'Draw' : TEAMS[pick][0];
-      return `
-        <article class="match-card">
-          <div class="outcome ${win ? 'won' : 'lost'}"><small>${win ? 'Won' : 'Lost'}</small><b>${win ? '+' : '−'}${fmt(Math.abs(coins))}</b><em>coins</em></div>
-          <div class="mc-body">
-            <div class="mc-top">${leagueTag(league)}<span class="when-chip">${pastLabel(ago)}</span></div>
-            <div class="teams">${team(home)}<span class="score">${hs} : ${as}</span>${team(away)}</div>
-            <div class="pick">Your pick: <b>${esc(pickName)}</b> · ${players} players</div>
-          </div>
-        </article>`;
-    }).join('');
-  };
-  const initResults = () => {
-    $('#results-tabs').addEventListener('click', (e) => {
-      const b = e.target.closest('[data-tab]');
-      if (!b) return;
-      resultsTab = b.dataset.tab;
-      $$('#results-tabs button').forEach((x) => x.classList.toggle('is-active', x === b));
-      renderResults();
-    });
-    renderResults();
-  };
-
-  // ---------- Profile ----------
-  const CREW_COLORS = ['#e8394a', '#3d9bff', '#2ecf7a', '#9b7bff', '#ff7a3d', '#12a0d7'];
-  const renderProfile = () => {
-    const items = DEALS.filter((d) => state.owned.includes(d.id));
-    $('#collection-count').textContent = items.length;
-    $('#collection').innerHTML = items.map((d) => `<figure><img src="${d.img}" alt=""><figcaption>${esc(d.name)}</figcaption></figure>`).join('') +
-      `<figure><button class="add" data-go="market" aria-label="Open Market">${icon('plus')}</button><figcaption>Get gear</figcaption></figure>`;
-    $('#crew-count').textContent = CREW.length;
-    $('#crew').innerHTML = CREW.map((c, i) => `<div class="mate"><span class="pic${i % 3 !== 2 ? ' online' : ''}" style="--c:${CREW_COLORS[i]}">${c[0]}</span>${c}</div>`).join('');
-    paintIcons($('#collection'));
-  };
-  const initProfile = () => {
-    renderProfile();
-    $('#set-reminders').addEventListener('change', (e) => toast(e.target.checked ? 'Match reminders on' : 'Match reminders off'));
-    $('#set-sound').addEventListener('change', (e) => toast(e.target.checked ? 'Sound effects on' : 'Sound effects off'));
   };
 
   // ---------- Fit the 390 x 844 phone canvas to the window ----------
@@ -465,13 +418,14 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOverlays(); });
   window.addEventListener('hashchange', () => go(location.hash.slice(1)));
 
+  // Shared helpers for the Results and Profile screens.
+  window.APP = { toast, go, refreshBalance: renderBalance, fmtBalance: () => fmt(state.balance) };
+
   paintIcons();
   renderBalance();
   renderBell();
   initGuide();
   initMatches();
   initMarket();
-  initResults();
-  initProfile();
   go(location.hash.slice(1) || 'home');
 })();
