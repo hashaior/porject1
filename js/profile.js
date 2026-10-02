@@ -49,6 +49,17 @@
     wizard: { n: 'Wizard Hat', slot: 'hat', r: '#B98CFF', defs: g('a', '#9A63F0', '#5B2E9E'), body: `<ellipse cx="42" cy="64" rx="36" ry="10" fill="#4B2490" ${IO}/><path d="M22 62C28 42 32 24 46 6c3 9 8 14 16 17-4 10-2 26 2 39z" fill="url(#a)" ${IO}/><path d="M24 54q20 6 38 0l2 8q-20 6-42 0z" fill="#F2C14E" ${IO}/><path d="M38 30l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z" fill="#FFE27A"/>` },
     shades: { n: 'Star Shades', slot: 'eyes', r: '#4DA3FF', defs: g('a', '#FF9CC6', '#E0457F') + g('b', '#5A3B7A', '#1E1233'), body: `<path d="M34 32q8-6 16 0" stroke="#1B1230" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M34 32q8-6 16 0" stroke="#FF7FB5" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M4 34c8-6 22-8 30-4 2 10-2 20-14 20C8 50 4 42 4 34z" fill="url(#a)" ${IO}/><path d="M80 34c-8-6-22-8-30-4-2 10 2 20 14 20 12 0 16-8 16-16z" fill="url(#a)" ${IO}/><path d="M10 36c5-3 14-4 20-2 0 7-3 12-10 12-7 0-10-4-10-10z" fill="url(#b)"/><path d="M74 36c-5-3-14-4-20-2 0 7 3 12 10 12 7 0 10-4 10-10z" fill="url(#b)"/><path d="M15 38l6-2M59 38l6-2" stroke="#fff" stroke-opacity=".8" stroke-width="2.5" stroke-linecap="round"/>` },
   };
+  // Items sold in the Market (same drawing style as the design's wardrobe items).
+  Object.assign(ITEMS, {
+    crown: { n: 'Royal Crown', slot: 'hat', r: '#F2B84B', price: 1500, defs: g('a', '#FFE59A', '#D9962B'), body: `<path d="M12 60L8 26l18 14 16-24 16 24 18-14-4 34z" fill="url(#a)" ${IO}/><rect x="11" y="56" width="62" height="13" rx="5" fill="#C98522" ${IO}/><circle cx="42" cy="44" r="6" fill="#E5484D" ${IO}/><circle cx="25" cy="48" r="4" fill="#4DA3FF" ${IO}/><circle cx="59" cy="48" r="4" fill="#8BEB6E" ${IO}/><circle cx="8" cy="25" r="4" fill="#FFF1C4" ${IO}/><circle cx="42" cy="15" r="4" fill="#FFF1C4" ${IO}/><circle cx="76" cy="25" r="4" fill="#FFF1C4" ${IO}/><path d="M20 34l6 5" stroke="#fff" stroke-opacity=".7" stroke-width="3" stroke-linecap="round"/>` },
+    viking: { n: 'Viking Helmet', slot: 'hat', r: '#B98CFF', price: 900, defs: g('a', '#CFE0E6', '#6F8C96'), body: `<path d="M22 46C10 42 4 30 8 14c4 10 10 17 20 19z" fill="#FFF1D6" ${IO}/><path d="M62 46c12-4 18-16 14-32-4 10-10 17-20 19z" fill="#FFF1D6" ${IO}/><path d="M18 60C18 38 28 24 42 24s24 14 24 36z" fill="url(#a)" ${IO}/><path d="M42 25v32" stroke="#4F6873" stroke-width="3"/><path d="M26 36q6-8 14-9" stroke="#fff" stroke-opacity=".7" stroke-width="3.5" fill="none" stroke-linecap="round"/><rect x="13" y="54" width="58" height="13" rx="5" fill="#B8741F" ${IO}/><circle cx="24" cy="60.5" r="2.2" fill="#FFE59A"/><circle cx="42" cy="60.5" r="2.2" fill="#FFE59A"/><circle cx="60" cy="60.5" r="2.2" fill="#FFE59A"/>` },
+    eyepatch: { n: 'Pirate Patch', slot: 'eyes', r: '#4DA3FF', price: 350, defs: g('a', '#3A2A4A', '#120A1C'), body: `<path d="M2 30Q42 16 82 30" stroke="#1B1230" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M2 30Q42 16 82 30" stroke="#5A3B2A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M46 28c12-5 24-3 26 6 2 11-6 19-15 19s-15-7-14-15z" fill="url(#a)" ${IO}/><path d="M53 33l10 5M63 33l-10 5" stroke="#F2C14E" stroke-width="2.6" stroke-linecap="round"/>` },
+    hearts: { n: 'Heart Shades', slot: 'eyes', r: '#FF6FA0', price: 500, defs: g('a', '#FF9CC6', '#E0457F'), body: `<path d="M34 32q8-6 16 0" stroke="#1B1230" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M34 32q8-6 16 0" stroke="#FFD1E3" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M19 28c-6-9-19-5-17 6 1 9 17 19 17 19s16-10 17-19c2-11-11-15-17-6z" fill="url(#a)" ${IO}/><path d="M65 28c-6-9-19-5-17 6 1 9 17 19 17 19s16-10 17-19c2-11-11-15-17-6z" fill="url(#a)" ${IO}/><path d="M9 32l4-3M55 32l4-3" stroke="#fff" stroke-opacity=".85" stroke-width="2.6" stroke-linecap="round"/>` },
+    scarf: { n: 'Fan Scarf', slot: 'extra', r: '#9FB3BD', price: 400, defs: g('a', '#FFE27A', '#F2B83B') + g('b', '#3E6FD8', '#16275E'), body: `<path d="M8 18q34 20 68 0l4 14q-38 22-76 0z" fill="url(#a)" ${IO}/><path d="M22 26l-3 13M38 30l-1 13M54 28l2 13" stroke="#16275E" stroke-width="5"/><path d="M50 32l4 38 14-3-6-37z" fill="url(#b)" ${IO}/><path d="M53 46l11-2M54 57l12-2" stroke="#FFE27A" stroke-width="4"/><path d="M56 70v6M61 69v6M66 68v6" stroke="#1B1230" stroke-width="2.4" stroke-linecap="round"/>` },
+    chain: { n: 'Gold Chain', slot: 'extra', r: '#B98CFF', price: 1200, defs: g('a', '#FFE59A', '#C98522'), body: `<path d="M10 14q32 44 64 0" stroke="#1B1230" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M10 14q32 44 64 0" stroke="#F2C14E" stroke-width="4.5" fill="none" stroke-dasharray="5 3" stroke-linecap="round"/><circle cx="42" cy="54" r="17" fill="url(#a)" ${IO}/><circle cx="42" cy="54" r="11" fill="none" stroke="#8A5A12" stroke-width="2"/><path d="M42 46l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" fill="#FFF4C9" stroke="#8A5A12" stroke-width="1.2" stroke-linejoin="round"/>` },
+  });
+  ['pirate', 'wizard', 'beanie', 'goggles', 'shades', 'monocle'].forEach((k) => { ITEMS[k].price = 0; });
+  const RARITY = { '#9FB3BD': 'Common', '#4DA3FF': 'Rare', '#FF6FA0': 'Rare', '#B98CFF': 'Epic', '#F2B84B': 'Legendary' };
   const item = (k) => svgWrap(ITEMS[k].defs, ITEMS[k].body, '0 0 84 84');
 
   /* icons */
@@ -82,12 +93,14 @@
   const pedestal = (w = 220) => `<svg class="pedestal" width="${w}" height="${w * 0.5}" viewBox="0 0 112 56"><defs><linearGradient id="pf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5DA7A0"/><stop offset="1" stop-color="#2B5F62"/></linearGradient><linearGradient id="pt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A6E3D8"/><stop offset="1" stop-color="#6DB5AB"/></linearGradient></defs><ellipse cx="56" cy="52" rx="52" ry="4" fill="#000" fill-opacity=".35"/><path d="M10 16h92v26a8 8 0 0 1-8 8H18a8 8 0 0 1-8-8z" fill="url(#pf)" stroke="#123A3C" stroke-width="2.5"/><path d="M14 30h84" stroke="#1E4E4C" stroke-width="2"/><ellipse cx="56" cy="16" rx="50" ry="11" fill="url(#pt)" stroke="#123A3C" stroke-width="2.5"/><ellipse cx="56" cy="13" rx="38" ry="5" fill="#fff" fill-opacity=".3"/><path d="M4 54c-2-8 0-14 3-18m0 0c-2-3-3-6-1-9m1 9c2-3 5-4 8-4" stroke="#FF6FA0" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M108 54c2-7 1-12-2-15m0 0c2-2 3-5 2-8m-2 8c-2-2-5-3-8-2" stroke="#FF9A3C" stroke-width="3" stroke-linecap="round" fill="none"/></svg>`;
 
   /* worn items overlay on the character (positions relative to a 100x100 avatar box) */
-  function wearing(key, hat, eyes) {
+  function wearing(key, hat, eyes, extra) {
     const pos = {
       hat: { shark: [16, -20, 68], octopus: [16, -22, 68], turtle: [16, -16, 68], crab: [20, -10, 60], puffer: [16, -14, 68] },
       eyes: { shark: [14, 20, 72], octopus: [14, 22, 72], turtle: [18, 36, 64], crab: [18, 4, 64], puffer: [14, 24, 72] },
+      extra: { shark: [16, 60, 68], octopus: [16, 58, 68], turtle: [20, 74, 60], crab: [20, 62, 60], puffer: [16, 66, 68] },
     };
     let h = '';
+    if (extra) { const [l, t, w] = pos.extra[key]; h += `<div class="worn" style="left:${l}%;top:${t}%;width:${w}%;height:${w}%">${item(extra)}</div>`; }
     if (eyes) { const [l, t, w] = pos.eyes[key]; h += `<div class="worn" style="left:${l}%;top:${t}%;width:${w}%;height:${w}%">${item(eyes)}</div>`; }
     if (hat) { const [l, t, w] = pos.hat[key]; h += `<div class="worn" style="left:${l}%;top:${t}%;width:${w}%;height:${w}%">${item(hat)}</div>`; }
     return h;
@@ -95,23 +108,43 @@
 
   /* ============ STATE (saved in this browser) ============ */
   const KEY = 'sharko.profile.v1';
-  const STATE = { animal: 'shark', hat: 'pirate', eyes: null };
+  const STATE = { animal: 'shark', hat: 'pirate', eyes: null, extra: null, owned: ['pirate', 'wizard', 'beanie', 'goggles', 'shades', 'monocle'] };
   try { Object.assign(STATE, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { /* use defaults */ }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(STATE)); } catch (e) { /* ignore */ } };
   const toast = (m) => window.APP && APP.toast(m);
   const userName = () => (window.APP ? APP.userName() : 'CaptainOr');
   const handle = () => userName().toLowerCase().replace(/[^a-z0-9]+/g, '_');
 
+  /* ============ FRIENDS (demo data) ============ */
+  const FRIEND_NAMES = [['octopus', 'Maya', 1], ['crab', 'Tomer', 1], ['turtle', 'Noa', 0], ['puffer', 'Eden', 1], ['shark', 'Daniel', 0], ['octopus', 'Lior', 0],
+    ['turtle', 'Yael', 1], ['shark', 'Amit', 0], ['crab', 'Shira', 1], ['puffer', 'Omer', 0], ['octopus', 'Gal', 1], ['shark', 'Roni', 0],
+    ['turtle', 'Itay', 0], ['crab', 'Tamar', 1], ['puffer', 'Ido', 0], ['octopus', 'Michal', 0], ['shark', 'Yonatan', 1], ['turtle', 'Hila', 0],
+    ['crab', 'Ben', 0], ['puffer', 'Dana', 1], ['octopus', 'Eyal', 0], ['shark', 'Neta', 0], ['turtle', 'Alon', 1], ['crab', 'Rotem', 0]];
+  const FAV_TEAMS = ['Maccabi Tel Aviv', 'Hapoel Be\'er Sheva', 'Maccabi Haifa', 'Liverpool', 'Real Madrid', 'Barcelona', 'Man City', 'Beitar Jerusalem'];
+  const FRIENDS = FRIEND_NAMES.map(([animalKey, name, online], i) => {
+    // stable pseudo-random numbers per friend (same values on every visit)
+    const r = (n) => { let t = (i + 1) * 2654435761 + n * 40503 >>> 0; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const matches = 12 + Math.floor(r(1) * 70);
+    const wins = Math.floor(matches * (0.3 + r(2) * 0.45));
+    const form = Array.from({ length: 5 }, (_, j) => { const x = r(10 + j); return x < 0.45 ? 'W' : x < 0.7 ? 'D' : 'L'; });
+    return {
+      animal: animalKey, name, online: !!online, handle: name.toLowerCase() + (i % 3 ? '_' + (10 + i) : ''),
+      level: 3 + Math.floor(r(3) * 22), matches, wins, rate: Math.round((wins / matches) * 100), lobbies: Math.floor(r(4) * 18),
+      coins: 400 + Math.floor(r(5) * 9000), team: FAV_TEAMS[Math.floor(r(6) * FAV_TEAMS.length)], form,
+      h2h: [Math.floor(r(7) * 6), Math.floor(r(8) * 6)], last: online ? 'Online now' : `Last seen ${1 + Math.floor(r(9) * 23)}h ago`,
+    };
+  });
+
   /* ============ SCREEN 1 : PROFILE ============ */
   function profileHTML() {
     const a = ANIMALS[STATE.animal];
-    const friends = [['octopus', 'Maya', 1], ['crab', 'Tomer', 1], ['turtle', 'Noa', 0], ['puffer', 'Eden', 1], ['shark', 'Daniel', 0], ['octopus', 'Lior', 0]];
+    const friends = FRIENDS.slice(0, 6).map((f) => [f.animal, f.name, f.online ? 1 : 0]);
     return `${rays()}<div class="scroll">${status()}
   <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.toast('Settings are not part of this demo')">${I(P.gear, '#F6D58A', 22)}<span class="dot"></span></div></div>
   <div class="hero"><div class="stage"></div>
     <div class="avatar-wrap" onclick="PS.openPicker()">
       <div class="ring"><div class="inner">${animal(STATE.animal)}</div></div>
-      <div style="position:absolute;inset:8px;overflow:visible">${wearing(STATE.animal, STATE.hat, STATE.eyes)}</div>
+      <div style="position:absolute;inset:8px;overflow:visible">${wearing(STATE.animal, STATE.hat, STATE.eyes, STATE.extra)}</div>
       <span class="gem" style="left:-4px;top:66px"></span><span class="gem" style="right:-4px;top:40px"></span>
       <div class="btn-gold swap">${I(P.swap, '#2B1A04', 20, 2.6)}</div>
       <div class="tap-hint"><svg width="24" height="20" viewBox="0 0 24 20"><path d="M22 2C14 2 8 8 4 16m0 0 6-1M4 16l-1-6" stroke="#F6D58A" stroke-width="2" fill="none" stroke-linecap="round"/></svg>TAP TO<br>CHANGE!</div>
@@ -122,7 +155,7 @@
 
 
   <div class="actions">
-    <div class="act gold" onclick="PS.openWardrobe()">${I(P.hanger, '#2B1A04', 24, 2.4)}WARDROBE<span class="badge">6</span></div>
+    <div class="act gold" onclick="PS.openWardrobe()">${I(P.hanger, '#2B1A04', 24, 2.4)}WARDROBE<span class="badge">${STATE.owned.length}</span></div>
     <div class="act teal" onclick="PS.toast('Profile editing is not part of this demo')">${I(P.pencil, '#fff', 22, 2.6)}EDIT PROFILE</div>
     <div class="act green" onclick="PS.openAdd()">${I(P.userplus, '#fff', 22, 2.6)}ADD FRIEND</div>
   </div>
@@ -132,10 +165,10 @@
     ${[['ball', '#4DA3FF', '48', 'Matches'], ['trophy', '#F2B84B', '31', 'Wins'], ['target', '#E5484D', '65%', 'Win rate'], ['flag', '#8BEB6E', '12', 'Lobbies']].map(([i, c, v, l]) => `<div class="card stat"><div class="ic" style="background:${c}">${I(P[i], '#1B1230', 20, 2.4)}</div><b>${v}</b><span>${l}</span></div>`).join('')}
   </div>
 
-  <div class="sec"><h2>FRIENDS <span class="chip">24</span></h2><span class="link">See all ›</span></div>
+  <div class="sec"><h2>FRIENDS <span class="chip">${FRIENDS.length}</span></h2><span class="link" onclick="PS.openFriends()">See all ›</span></div>
   <div class="friends">
     <div class="fr add" onclick="PS.openAdd()"><div class="av">${I(P.userplus, '#8BEB6E', 24, 2.4)}</div><span>Invite</span></div>
-    ${friends.map(([k, n, on]) => `<div class="fr"><div class="av"><div class="clip">${animal(k)}</div>${on ? '<span class="on"></span>' : ''}</div><span>${n}</span></div>`).join('')}
+    ${friends.map(([k, n, on], i) => `<div class="fr" onclick="PS.openFriend(${i})"><div class="av"><div class="clip">${animal(k)}</div>${on ? '<span class="on"></span>' : ''}</div><span>${n}</span></div>`).join('')}
   </div>
 
   <div class="sec"><h2>MY DETAILS</h2><span class="link" style="display:flex;gap:4px;align-items:center">${I(P.pencil, '#F6D58A', 13, 2.6)} Edit</span></div>
@@ -189,21 +222,64 @@
   /* ============ SCREEN 3 : WARDROBE ============ */
   let wardTab = 'ALL';
   function wardrobeHTML() {
-    const tabs = { ALL: () => true, HATS: (k) => ITEMS[k].slot === 'hat', EYES: (k) => ITEMS[k].slot === 'eyes', EXTRAS: () => false };
-    const inv = ['pirate', 'wizard', 'beanie', 'goggles', 'shades', 'monocle'].filter(tabs[wardTab]);
-    const isOn = (k) => STATE.hat === k || STATE.eyes === k;
+    const tabs = { ALL: () => true, HATS: (k) => ITEMS[k].slot === 'hat', EYES: (k) => ITEMS[k].slot === 'eyes', EXTRAS: (k) => ITEMS[k].slot === 'extra' };
+    const inv = STATE.owned.filter(tabs[wardTab]);
+    const isOn = (k) => STATE.hat === k || STATE.eyes === k || STATE.extra === k;
     return `${rays()}<div class="scroll">${status()}
   <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.openProfile()" aria-label="Back">${I('<path d="m15 18-6-6 6-6"/>', '#F6D58A', 24, 2.6)}</div></div>
   <div class="wtitle"><div class="woodsign"><b>WARDROBE</b></div></div>
   <div class="mannequin"><div class="spot"></div>${pedestal(240)}
-    <div class="char"><div class="clip">${animal(STATE.animal)}</div><div style="position:absolute;inset:0">${wearing(STATE.animal, STATE.hat, STATE.eyes)}</div></div>
+    <div class="char"><div class="clip">${animal(STATE.animal)}</div><div style="position:absolute;inset:0">${wearing(STATE.animal, STATE.hat, STATE.eyes, STATE.extra)}</div></div>
     <div class="side" style="left:20px;top:40px"><div class="slotbtn ${STATE.hat ? 'fill' : ''}" onclick="PS.tab('HATS')">${STATE.hat ? `<div style="width:36px;height:36px">${item(STATE.hat)}</div>` : I(P.hanger, '#4F6873', 22, 2)}<small>HEAD</small></div><div class="slotbtn ${STATE.eyes ? 'fill' : ''}" style="margin-top:12px" onclick="PS.tab('EYES')">${STATE.eyes ? `<div style="width:36px;height:36px">${item(STATE.eyes)}</div>` : I('<circle cx="7" cy="14" r="4"/><circle cx="17" cy="14" r="4"/><path d="M11 14h2"/>', '#4F6873', 24, 2)}<small>EYES</small></div></div>
-    <div class="side" style="right:20px;top:40px"><div class="slotbtn" onclick="PS.tab('EXTRAS')">${I(P.bag, '#4F6873', 22, 2)}<small>EXTRA</small></div><div class="slotbtn" style="margin-top:12px" onclick="PS.randomLook()">${I(P.swap, '#F6D58A', 22, 2.4)}<small>RANDOM</small></div></div>
+    <div class="side" style="right:20px;top:40px"><div class="slotbtn ${STATE.extra ? 'fill' : ''}" onclick="PS.tab('EXTRAS')">${STATE.extra ? `<div style="width:36px;height:36px">${item(STATE.extra)}</div>` : I(P.bag, '#4F6873', 22, 2)}<small>EXTRA</small></div><div class="slotbtn" style="margin-top:12px" onclick="PS.randomLook()">${I(P.swap, '#F6D58A', 22, 2.4)}<small>RANDOM</small></div></div>
   </div>
   <div class="tabs">${['ALL', 'HATS', 'EYES', 'EXTRAS'].map((t) => `<div class="${t === wardTab ? 'on' : ''}" onclick="PS.tab('${t}')">${t}</div>`).join('')}</div>
-  <div class="inv">${inv.length ? inv.map((k) => `<div class="it ${isOn(k) ? 'eq' : ''}"><span class="rar" style="background:${ITEMS[k].r}"></span><div class="art">${item(k)}</div><div class="nm">${ITEMS[k].n}</div><div class="pill ${isOn(k) ? 'on' : 'equip'}" onclick="PS.equip('${k}')">${isOn(k) ? '✓ WEARING' : 'EQUIP'}</div></div>`).join('') : '<div class="empty-inv">No extras yet. Find some in the Market.</div>'}</div>
+  <div class="inv">${inv.length ? inv.map((k) => `<div class="it ${isOn(k) ? 'eq' : ''}"><span class="rar" style="background:${ITEMS[k].r}"></span><div class="art">${item(k)}</div><div class="nm">${ITEMS[k].n}</div><div class="pill ${isOn(k) ? 'on' : 'equip'}" onclick="PS.equip('${k}')">${isOn(k) ? '✓ WEARING' : 'EQUIP'}</div></div>`).join('') : `<div class="empty-inv">Nothing here yet. Find more in the Market.</div>`}</div>
   <div class="more" data-go="market">${I(P.wallet, '#F6D58A', 18, 2.2)} Get more items in the Market ›</div>
   <div class="bigbtn" style="margin:14px 16px 0" onclick="PS.saveLook()">SAVE LOOK</div>
+  </div>`;
+  }
+
+  /* ============ FRIENDS LIST ============ */
+  let friendTab = 'ALL';
+  let friendQuery = '';
+  function friendsHTML() {
+    const online = FRIENDS.filter((f) => f.online).length;
+    return `${rays()}<div class="scroll">${status()}
+  <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.openProfile()" aria-label="Back">${I('<path d="m15 18-6-6 6-6"/>', '#F6D58A', 24, 2.6)}</div></div>
+  <div class="wtitle"><div class="woodsign"><b>FRIENDS</b></div></div>
+  <div class="search" style="margin:16px 16px 0">${I('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', '#A9BCC4', 20, 2.4)}<input id="fl-search" placeholder="Search friends" value="${friendQuery.replace(/"/g, '&quot;')}" oninput="PS.filterFriends(this.value)"></div>
+  <div class="tabs"><div class="${friendTab === 'ALL' ? 'on' : ''}" onclick="PS.friendTab('ALL')">ALL ${FRIENDS.length}</div><div class="${friendTab === 'ONLINE' ? 'on' : ''}" onclick="PS.friendTab('ONLINE')"><span class="ondot"></span>ONLINE ${online}</div></div>
+  <div class="sug fl-list" id="fl-list">${friendRows()}</div>
+  <div class="more" onclick="PS.openAdd()">${I(P.userplus, '#F6D58A', 18, 2.2)} Add more friends</div>
+  </div>`;
+  }
+  function friendRows() {
+    const q = friendQuery.trim().toLowerCase();
+    const list = FRIENDS.map((f, i) => [f, i]).filter(([f]) => (friendTab === 'ALL' || f.online) && (!q || (f.name + ' ' + f.handle).toLowerCase().includes(q)));
+    if (!list.length) return '<div class="empty-inv">No friends match your search.</div>';
+    return list.map(([f, i]) => `<div class="person fl-row" onclick="PS.openFriend(${i})"><div class="pa fl-av">${animal(f.animal)}${f.online ? '<span class="fl-on"></span>' : ''}</div><div class="grow"><div class="n">${f.name} <span class="fl-lvl">LV ${f.level}</span></div><div class="h">@${f.handle} · ${f.last}</div></div><div class="fl-rate"><b>${f.rate}%</b><small>WIN RATE</small></div><span class="fl-chev">›</span></div>`).join('');
+  }
+  function friendSheet(i) {
+    const f = FRIENDS[i];
+    const formClass = { W: 'w', D: 'd', L: 'l' };
+    return `<div class="dim" onclick="PS.closeSheet()"></div><div class="sheet fr-sheet">
+    <div class="plate">${f.name.toUpperCase()}</div>
+    <div class="close" onclick="PS.closeSheet()">${I(P.x, '#fff', 16, 3.2)}</div>
+    <div class="preview"><div class="big">${animal(f.animal)}</div><div>
+      <h4>${f.name}</h4><p>@${f.handle}</p>
+      <div class="traits"><span class="fr-lv">LEVEL ${f.level}</span><span class="${f.online ? 'fr-online' : 'fr-off'}">${f.online ? '● ONLINE' : f.last.toUpperCase()}</span></div>
+      <p class="fr-team">${I(P.shirt, '#F6D58A', 14, 2.2)} ${f.team}</p>
+    </div></div>
+    <div class="stats fr-stats">
+      ${[['ball', '#4DA3FF', f.matches, 'Matches'], ['trophy', '#F2B84B', f.wins, 'Wins'], ['target', '#E5484D', f.rate + '%', 'Win rate'], ['flag', '#8BEB6E', f.lobbies, 'Lobbies']].map(([ic, c, v, l]) => `<div class="card stat"><div class="ic" style="background:${c}">${I(P[ic], '#1B1230', 20, 2.4)}</div><b>${v}</b><span>${l}</span></div>`).join('')}
+    </div>
+    <div class="fr-row2">
+      <div class="card fr-box"><small>RECENT FORM</small><div class="fr-form">${f.form.map((x) => `<i class="${formClass[x]}">${x}</i>`).join('')}</div></div>
+      <div class="card fr-box"><small>YOU VS ${f.name.toUpperCase()}</small><div class="fr-h2h"><b>${f.h2h[0]}</b><span>:</span><b>${f.h2h[1]}</b></div></div>
+    </div>
+    <div class="card fr-box fr-coins"><small>COINS WON THIS SEASON</small><b>${f.coins.toLocaleString('en-US')}</b></div>
+    <div class="bigbtn" onclick="PS.inviteFriend(${i})">${I(P.userplus, '#2B1A04', 22, 2.8)} INVITE TO PARTY</div>
   </div>`;
   }
 
@@ -213,7 +289,7 @@
   const render = (keepScroll) => {
     const sc = screen().querySelector('.scroll');
     const top = keepScroll && sc ? sc.scrollTop : 0;
-    screen().innerHTML = view === 'wardrobe' ? wardrobeHTML() : profileHTML();
+    screen().innerHTML = view === 'wardrobe' ? wardrobeHTML() : view === 'friends' ? friendsHTML() : profileHTML();
     screen().querySelector('.scroll').scrollTop = top;
   };
   const openSheet = (html) => { PS.closeSheet(); screen().insertAdjacentHTML('beforeend', html); };
@@ -225,6 +301,23 @@
     animalInfo: (k) => ANIMALS[k],
     setAnimal(k) { STATE.animal = k; save(); render(); },
     openWardrobe() { view = 'wardrobe'; render(); },
+    openFriends() { view = 'friends'; render(); },
+    openFriend(i) { openSheet(friendSheet(i)); },
+    friendTab(t) { friendTab = t; render(true); },
+    filterFriends(q) { friendQuery = q; document.getElementById('fl-list').innerHTML = friendRows(); },
+    inviteFriend(i) { PS.closeSheet(); toast(`Party invite sent to ${FRIENDS[i].name}`); },
+    // Shared with the Market
+    item: (k) => item(k),
+    itemInfo: (k) => ({ ...ITEMS[k], rarity: RARITY[ITEMS[k].r] }),
+    marketItems: () => Object.keys(ITEMS),
+    owns: (k) => STATE.owned.includes(k),
+    wearing: (k, hat, eyes, extra) => wearing(k, hat, eyes, extra),
+    look: () => ({ animal: STATE.animal, hat: STATE.hat, eyes: STATE.eyes, extra: STATE.extra }),
+    pedestal: (w) => pedestal(w),
+    grant(k) {
+      if (!STATE.owned.includes(k)) STATE.owned.push(k);
+      STATE[ITEMS[k].slot] = k; save(); render(true);
+    },
     openPicker() { openSheet(pickerHTML(STATE.animal)); },
     openAdd() { openSheet(addHTML()); },
     closeSheet() { screen().querySelectorAll('.dim,.sheet').forEach((n) => n.remove()); },
@@ -247,8 +340,10 @@
     },
     randomLook() {
       const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-      STATE.hat = pick(['pirate', 'wizard', 'beanie', null]);
-      STATE.eyes = pick(['goggles', 'shades', 'monocle', null]);
+      const of = (slot) => STATE.owned.filter((k) => ITEMS[k].slot === slot);
+      STATE.hat = pick([...of('hat'), null]);
+      STATE.eyes = pick([...of('eyes'), null]);
+      STATE.extra = pick([...of('extra'), null]);
       render(true);
     },
     saveLook() { save(); toast('Look saved'); PS.openProfile(); },

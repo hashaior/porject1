@@ -1,0 +1,97 @@
+/* Market: built in the language of profile-screen_1.html (ink outlines, wood sign, teal tabs, gold buttons). */
+#screen-market{--goldTxt:#2B1A04;--ink:#1B1230;--txt:#E6EEF1;--mut:#A9BCC4;--dim:#7F95A0;--line:rgba(255,255,255,.10);--glass:rgba(6,19,26,.72);--tealLine:#123A3C;--green1:#8BEB6E;--green2:#2FA84A;--greenLip:#1C6B2C;--greenLine:#0F4A1C}
+#screen-market{overflow:hidden;padding:0;background:linear-gradient(180deg,#0F3440 0%,#0B2330 45%,#071520 100%);font-family:Manrope,system-ui,sans-serif;color:var(--txt)}
+#screen-market *{box-sizing:border-box;margin:0;padding:0}
+#screen-market .rays{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#screen-market .rays i{position:absolute;top:-40px;height:560px;background:linear-gradient(180deg,rgba(191,245,240,.11),rgba(191,245,240,0));transform-origin:top}
+#screen-market .rays .glow{position:absolute;left:-60px;top:-140px;width:520px;height:360px;border-radius:50%;background:radial-gradient(closest-side,rgba(47,163,168,.38),rgba(47,163,168,0))}
+#screen-market .scroll{position:absolute;inset:0;overflow-y:auto;padding-bottom:120px;scrollbar-width:none}
+#screen-market .scroll::-webkit-scrollbar{display:none}
+#screen-market .status{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-weight:700;font-size:15px;position:relative;z-index:2}
+#screen-market .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 16px 0;position:relative;z-index:2}
+#screen-market .bal{display:flex;align-items:center;gap:12px;background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:6px}
+#screen-market .coin{width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,#FFE08A,#D9962B);border:1.5px solid #8A5A12;display:grid;place-items:center}
+#screen-market .bal small{display:block;font-size:10px;color:var(--mut);font-weight:500}
+#screen-market .bal b{font-size:17px;font-weight:800}
+#screen-market .btn-gold{background:linear-gradient(180deg,#FBDD8E,#E3A33C);color:var(--goldTxt);border:1px solid rgba(255,241,194,.6);box-shadow:inset 0 -3px 0 rgba(154,95,16,.6),0 4px 14px rgba(227,163,60,.35);font-weight:800}
+#screen-market .topup{border-radius:999px;padding:10px 18px;font-size:15px;cursor:pointer}
+#screen-market .iconbtn{width:46px;height:46px;border-radius:15px;background:var(--glass);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer}
+#screen-market .wtitle{display:flex;justify-content:center;margin-top:12px;position:relative;z-index:2}
+#screen-market .woodsign{position:relative;padding:10px 46px 14px;border-radius:12px;background:linear-gradient(180deg,#B57443,#8E5129 50%,#65361A);border:3px solid #3A1D0B;box-shadow:inset 0 3px 0 rgba(231,165,110,.45),0 5px 0 rgba(0,0,0,.4);font:30px 'Lilita One';letter-spacing:.04em}
+#screen-market .woodsign b{background:linear-gradient(180deg,#FFF6D6,#F2C063);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:1.2px #3A1D0B;filter:drop-shadow(0 3px 0 #2A1206);font-weight:400}
+#screen-market .woodsign:before,#screen-market .woodsign:after{content:"";position:absolute;top:8px;bottom:8px;width:16px;border-radius:5px;background:linear-gradient(180deg,#A9C3CC,#5E7680);border:2.5px solid #27353B}
+#screen-market .woodsign:before{left:8px}
+#screen-market .woodsign:after{right:8px}
+
+/* Daily deal */
+#screen-market .deal{position:relative;margin:18px 16px 0;display:flex;gap:6px;align-items:center;padding:14px 14px 14px 6px;border-radius:22px;cursor:pointer;
+  background:radial-gradient(closest-side,rgba(242,184,75,.22),rgba(242,184,75,0)) -20px 0/220px 200px no-repeat,linear-gradient(180deg,rgba(18,58,71,.95),rgba(10,31,42,.95));
+  border:2px solid rgba(246,213,138,.6);box-shadow:0 0 24px rgba(242,184,75,.18),0 8px 18px -4px rgba(0,0,0,.5)}
+#screen-market .deal-ribbon{position:absolute;top:-12px;left:14px;padding:3px 10px 4px;border-radius:8px;border:2.5px solid var(--ink);background:linear-gradient(180deg,#FF7A7F,#C9303A);box-shadow:inset 0 -3px 0 #7E141C;font:12px 'Lilita One';letter-spacing:.08em;color:#fff;text-shadow:0 1px 0 #4A0E14}
+#screen-market .deal-art{position:relative;width:150px;height:140px;flex:none}
+#screen-market .deal-ped{position:absolute;left:0;bottom:0}
+#screen-market .deal-item{position:absolute;left:30px;top:6px;width:92px;height:92px;filter:drop-shadow(0 6px 4px rgba(0,0,0,.45));animation:mk-float 3s ease-in-out infinite}
+@keyframes mk-float{50%{transform:translateY(-6px)}}
+#screen-market .deal-info{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+#screen-market .deal-info h3{font:21px 'Lilita One';color:#fff;letter-spacing:.02em;text-shadow:0 2px 0 rgba(0,0,0,.5);line-height:1.05}
+#screen-market .rar-chip{font:800 9.5px Manrope;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:var(--rc);border:1px solid var(--rc);background:rgba(0,0,0,.25)}
+#screen-market .deal-prices{display:flex;align-items:center;gap:8px}
+#screen-market .deal-prices s{font-size:13px;font-weight:700;color:var(--dim)}
+#screen-market .deal-prices b{display:flex;align-items:center;gap:5px;font:22px 'Lilita One';color:#F6D58A;font-weight:400;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+#screen-market .deal-timer{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--mut)}
+#screen-market .deal-timer span{color:#fff;font-variant-numeric:tabular-nums}
+#screen-market .deal-btn{margin-top:3px;height:34px;padding:0 14px;border-radius:11px;display:grid;place-items:center;font:14px 'Lilita One';letter-spacing:.05em;color:var(--goldTxt);border:2.5px solid var(--ink);background:linear-gradient(180deg,#FCE39A,#F0BC55 55%,#DB952F);box-shadow:inset 0 -3px 0 rgba(142,86,12,.6),0 3px 0 rgba(0,0,0,.35)}
+#screen-market .deal-btn.owned{background:linear-gradient(180deg,var(--green1),var(--green2));color:#fff;text-shadow:0 1px 0 var(--greenLine);box-shadow:inset 0 -3px 0 var(--greenLip)}
+
+/* Tabs + item grid */
+#screen-market .tabs{display:flex;gap:6px;margin:18px 16px 0;background:rgba(6,19,26,.7);border:1px solid var(--line);border-radius:16px;padding:5px}
+#screen-market .tabs div{flex:1;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font:14px 'Lilita One';color:var(--mut);letter-spacing:.03em;cursor:pointer}
+#screen-market .tabs .on{background:linear-gradient(180deg,#8AD6CB,#3F8C85);color:#fff;text-shadow:0 2px 0 var(--tealLine);box-shadow:inset 0 -3px 0 rgba(18,58,60,.7);border:2px solid var(--tealLine)}
+#screen-market .mk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 16px 0}
+#screen-market .mk-it{border-radius:18px;padding:12px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;cursor:pointer;background:linear-gradient(180deg,rgba(18,58,71,.92),rgba(10,31,42,.92));border:2px solid rgba(255,255,255,.08);transition:transform .1s}
+#screen-market .mk-it:active{transform:scale(.97)}
+#screen-market .mk-it .rar{position:absolute;top:8px;left:8px;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--ink)}
+#screen-market .mk-slot{position:absolute;top:6px;right:8px;font:800 8.5px Manrope;letter-spacing:.08em;color:var(--dim)}
+#screen-market .mk-it .art{width:66px;height:66px;display:grid;place-items:center;border-radius:14px;background:radial-gradient(closest-side,rgba(255,241,184,.25),rgba(255,241,184,0))}
+#screen-market .mk-it .nm{font:12px 'Lilita One';color:#fff;letter-spacing:.02em;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#screen-market .mk-price{width:100%;height:28px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:4px;font:13px 'Lilita One';letter-spacing:.03em;border:2px solid var(--ink);color:var(--goldTxt);background:linear-gradient(180deg,#FCE39A,#DB952F);box-shadow:inset 0 -3px 0 rgba(142,86,12,.6)}
+#screen-market .mk-price.owned{background:rgba(255,255,255,.08);color:var(--mut);border-color:rgba(255,255,255,.15);box-shadow:none}
+#screen-market .mk-price.on{background:linear-gradient(180deg,var(--green1),var(--green2));color:#fff;text-shadow:0 1px 0 var(--greenLine);box-shadow:inset 0 -3px 0 var(--greenLip)}
+#screen-market .mk-it.is-owned .art{opacity:.75}
+
+/* Treasure chests */
+#screen-market .sec{margin:24px 16px 10px;display:flex;justify-content:space-between;align-items:baseline}
+#screen-market .sec h2{font:18px 'Lilita One';letter-spacing:.04em;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+#screen-market .sec-note{font-size:11px;font-weight:700;color:var(--dim)}
+#screen-market .chests{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 16px}
+#screen-market .chest{position:relative;border-radius:18px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:linear-gradient(180deg,rgba(18,58,71,.92),rgba(10,31,42,.92));border:1px solid rgba(246,213,138,.28)}
+#screen-market .chest-art{width:70px;height:70px}
+#screen-market .chest b{display:flex;align-items:center;gap:4px;font:16px 'Lilita One';color:#F6D58A;font-weight:400}
+#screen-market .chest small{font-size:10px;font-weight:700;color:var(--mut)}
+#screen-market .chest-btn{margin-top:4px;width:100%;height:30px;border-radius:10px;display:grid;place-items:center;font:13px 'Lilita One';letter-spacing:.03em;color:#fff;text-shadow:0 1px 0 var(--greenLine);border:2px solid var(--ink);background:linear-gradient(180deg,var(--green1),var(--green2));box-shadow:inset 0 -3px 0 var(--greenLip)}
+#screen-market .chest-tag{position:absolute;top:-8px;right:-4px;background:#E5484D;color:#fff;border:2px solid var(--ink);border-radius:999px;font:10px 'Lilita One';padding:1px 7px;letter-spacing:.04em}
+#screen-market .chest-tag.best{background:linear-gradient(180deg,#C9A2FF,#6A3FB5)}
+#screen-market .mk-note{text-align:center;margin-top:14px;font-size:11px;font-weight:600;color:var(--dim)}
+
+/* Try-on sheet */
+#screen-market .dim{position:absolute;inset:0;background:rgba(2,8,12,.7);z-index:20}
+#screen-market .sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;border-radius:30px 30px 0 0;padding:36px 18px 34px;background:linear-gradient(180deg,#15414F,#0A1F2A);border-top:2px solid rgba(246,213,138,.6);box-shadow:0 -20px 50px rgba(0,0,0,.6)}
+#screen-market .plate{position:absolute;left:50%;top:-22px;transform:translateX(-50%);white-space:nowrap;padding:8px 24px 10px;border-radius:12px;background:linear-gradient(180deg,#B57443,#6E3D1D);border:3px solid #3A1D0B;box-shadow:inset 0 3px 0 rgba(231,165,110,.5),0 4px 0 rgba(0,0,0,.45);font:20px 'Lilita One';color:#FFF1CF;letter-spacing:.04em;text-shadow:0 2px 0 #3A1D0B}
+#screen-market .plate:before,#screen-market .plate:after{content:"";position:absolute;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#A9C3CC;border:2px solid #27353B}
+#screen-market .plate:before{left:8px}
+#screen-market .plate:after{right:8px}
+#screen-market .close{position:absolute;right:16px;top:14px;width:38px;height:38px;border-radius:50%;background:linear-gradient(180deg,#FF7A7F,#C9303A);border:2.5px solid #4A0E14;box-shadow:inset 0 -3px 0 #7E141C,0 3px 0 rgba(0,0,0,.4);display:grid;place-items:center;cursor:pointer}
+#screen-market .try{display:flex;align-items:center;gap:18px;margin:10px 4px 4px}
+#screen-market .try-av{position:relative;width:124px;height:124px;flex:none}
+#screen-market .try-clip{width:100%;height:100%;border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px var(--ink),0 0 0 7px #F2C063,0 0 0 10px var(--ink),0 0 30px rgba(242,184,75,.45)}
+#screen-market .try-worn{position:absolute;inset:0}
+#screen-market .try-worn .worn{position:absolute;pointer-events:none;filter:drop-shadow(0 4px 3px rgba(0,0,0,.4))}
+#screen-market .try-info{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+#screen-market .try-info h4{font:24px 'Lilita One';color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5);line-height:1.05}
+#screen-market .try-info p{font-size:12.5px;color:var(--mut);font-weight:600;line-height:1.45}
+#screen-market .try-price{display:flex;align-items:center;gap:6px;margin-top:2px}
+#screen-market .try-price b{font:24px 'Lilita One';color:#F6D58A;font-weight:400;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+#screen-market .try-price s{font-size:13px;font-weight:700;color:var(--dim)}
+#screen-market .bigbtn{margin-top:18px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:10px;border:2.5px solid var(--ink);font:20px 'Lilita One';letter-spacing:.04em;color:var(--goldTxt);cursor:pointer;background:linear-gradient(180deg,#FCE39A,#F0BC55 55%,#DB952F);box-shadow:inset 0 -5px 0 rgba(142,86,12,.65),inset 0 2px 0 rgba(255,255,255,.55),0 4px 0 rgba(0,0,0,.35)}
+#screen-market .bigbtn.short{font-size:17px;background:linear-gradient(180deg,#8AD6CB,#3F8C85);color:#fff;text-shadow:0 2px 0 var(--tealLine);box-shadow:inset 0 -5px 0 rgba(18,58,60,.7),0 4px 0 rgba(0,0,0,.35)}
+#screen-market .short-note{text-align:center;margin-top:8px;font-size:12px;font-weight:700;color:#FF8A8E}

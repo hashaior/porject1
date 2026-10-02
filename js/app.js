@@ -76,7 +76,8 @@
     const scr = $(`#screen-${name}`);
     if (scr) { scr.scrollTop = 0; const inner = $('.scroll', scr); if (inner) inner.scrollTop = 0; }
     $('#phone').classList.toggle('on-home', name === 'home');
-    $('#phone').classList.toggle('own-status', name === 'results' || name === 'profile');
+    $('#phone').classList.toggle('own-status', name === 'results' || name === 'profile' || name === 'market');
+    if (name === 'market' && window.MK) MK.render();
     if (location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
   };
 
@@ -344,54 +345,6 @@
     });
   };
 
-  // ---------- Market ----------
-  const renderMarket = () => {
-    $('#deals').innerHTML = DEALS.map((d) => {
-      const owned = state.owned.includes(d.id);
-      return `
-        <button class="deal${owned ? ' is-owned' : ''}" data-deal="${d.id}" aria-label="${esc(d.name)}, ${owned ? 'owned' : d.price}">
-          <img class="deal-img" src="${d.img}" alt="">
-          <div class="pedestal"><div class="pedestal-top"></div><div class="pedestal-front"><span class="price">${owned ? 'Owned' : d.price}</span></div></div>
-          <span class="deal-name">${esc(d.name)}</span>
-        </button>`;
-    }).join('');
-  };
-  const openDeal = (d) => {
-    const owned = state.owned.includes(d.id);
-    openSheet(`
-      <div class="item-preview">
-        <img src="${d.img}" alt="">
-        <h3>${esc(d.name)}</h3>
-        <p class="sub">Daily Deal · cosmetic for your avatar</p>
-      </div>
-      <button class="btn-gold cta" data-buy ${owned ? 'disabled' : ''}>${owned ? 'Already owned' : `Buy for ${d.price}`}</button>
-      <p class="note">Demo store. Nothing is charged.</p>`, (body) => {
-      const b = $('[data-buy]', body);
-      if (owned) return;
-      b.addEventListener('click', () => {
-        state.owned.push(d.id); save(); closeSheet(); renderMarket();
-        toast(`${d.name} added to your collection`);
-      });
-    });
-  };
-  const tickDealsTimer = () => {
-    const now = new Date();
-    const end = new Date(now); end.setHours(24, 0, 0, 0);
-    let s = Math.max(0, Math.floor((end - now) / 1000));
-    const h = String(Math.floor(s / 3600)).padStart(2, '0'); s %= 3600;
-    const m = String(Math.floor(s / 60)).padStart(2, '0');
-    $('#deals-timer').textContent = `${h}:${m}:${String(s % 60).padStart(2, '0')}`;
-  };
-  const initMarket = () => {
-    renderMarket();
-    $('#deals').addEventListener('click', (e) => {
-      const b = e.target.closest('[data-deal]');
-      if (b) openDeal(DEALS.find((d) => d.id === b.dataset.deal));
-    });
-    tickDealsTimer();
-    setInterval(tickDealsTimer, 1000);
-  };
-
   // ---------- Fit the 390 x 844 phone canvas to the window ----------
   const fit = () => {
     const phone = $('#phone');
@@ -425,6 +378,9 @@
     userName: () => state.name,
     setUser(name) { state.name = name; save(); renderGuide(false); if (window.PS) PS.openProfile(); },
     addCoins(n) { state.balance += n; save(); renderBalance(); },
+    balance: () => state.balance,
+    spend(n) { if (state.balance < n) return false; state.balance -= n; save(); renderBalance(); return true; },
+    topUp: () => openTopUp(),
   };
 
   paintIcons();
@@ -432,6 +388,5 @@
   renderBell();
   initGuide();
   initMatches();
-  initMarket();
   go(location.hash.slice(1) || 'home');
 })();

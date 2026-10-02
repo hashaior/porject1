@@ -311,75 +311,11 @@ i[data-icon] svg { width: 100%; height: 100%; }
   font-family: var(--font-display); font-weight: 400; font-size: 15.7px; letter-spacing: 1px; text-transform: uppercase;
 }
 
-/* ---------- MARKET ---------- */
-.screen-market {
-  isolation: isolate;
-  background-color: var(--stone-2);
-  background-image:
-    linear-gradient(180deg, rgba(4, 18, 22, 0) 30%, rgba(4, 18, 22, 0.55) 100%),
-    linear-gradient(rgba(0, 0, 0, 0.18) 2px, transparent 2px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.18) 2px, transparent 2px),
-    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.05), transparent 60%);
-  background-size: 100% 100%, 64px 48px, 64px 48px, 64px 48px;
-  background-attachment: local;
-}
-.screen-market { padding-top: 50px; }
-.market-hero { position: relative; }
-.market-hero img { width: 100%; aspect-ratio: 304 / 120; object-fit: cover; }
-.market-hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 30px; background: linear-gradient(transparent, var(--stone-2)); }
-.market-sign {
-  position: relative; display: flex; align-items: center; justify-content: space-between;
-  margin: -6px 22px 0; padding: 7px 10px; border-radius: 10px;
-  background:
-    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0 2px, transparent 2px 9px),
-    linear-gradient(180deg, #9b6a3f, #6d4322);
-  border: 3px solid #3c220e; box-shadow: inset 0 2px 0 rgba(255, 220, 170, 0.3), 0 6px 12px rgba(0, 0, 0, 0.45);
-}
-.market-sign h1 {
-  font-family: var(--font-display); font-weight: 400; font-size: 30px; color: #f6c9a1; letter-spacing: 1px;
-  text-shadow: 0 2px 0 #3c220e, 0 -1px 0 #3c220e, 2px 0 0 #3c220e, -2px 0 0 #3c220e;
-}
-.bolt { width: 18px; height: 34px; border-radius: 4px; background: linear-gradient(180deg, #6f8c90, #39555a); border: 2px solid #22363a; box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.18); }
-.ribbon {
-  margin: 14px 30px 0; padding: 7px; text-align: center; position: relative;
-  background: linear-gradient(180deg, #8fd0c6, #4a9a92); border: 2px solid #1f4d4c; border-radius: 6px;
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 4px 8px rgba(0, 0, 0, 0.35);
-}
-.ribbon::before, .ribbon::after {
-  content: ""; position: absolute; top: 7px; width: 22px; height: 100%; background: #3c847d; border: 2px solid #1f4d4c; z-index: -1;
-}
-.ribbon::before { left: -16px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 35% 50%); }
-.ribbon::after { right: -16px; clip-path: polygon(0 0, 100% 0, 65% 50%, 100% 100%, 0 100%); }
-.ribbon h2 { font-family: var(--font-display); font-weight: 400; font-size: 20px; color: #fff; letter-spacing: 0.5px; text-shadow: 0 2px 0 #1f4d4c; }
-.deals-timer { text-align: center; font-size: 12px; font-weight: 700; color: #cde6e3; margin-top: 8px; }
-.deals-timer b { color: var(--gold-text); font-variant-numeric: tabular-nums; }
-.deals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 10px; padding: 14px 14px 0; }
-.deal { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.deal-img {
-  width: 92%; aspect-ratio: 1; object-fit: cover; margin-bottom: -10px; position: relative; z-index: 1;
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 52%, transparent 72%);
-  mask-image: radial-gradient(circle at 50% 50%, #000 52%, transparent 72%);
-  filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.35));
-}
-.deal .pedestal { width: 100%; position: relative; }
-.pedestal-top {
-  height: 16px; margin: 0 4px; border-radius: 6px 6px 3px 3px;
-  background: linear-gradient(180deg, #7fc4ba, var(--stone-top)); border: 2px solid #1d4a49;
-}
-.pedestal-front {
-  display: grid; place-items: center; height: 54px; margin-top: -2px; border-radius: 3px 3px 8px 8px;
-  background: linear-gradient(180deg, var(--stone-front), #2c6763); border: 2px solid #1d4a49;
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.12), 0 6px 10px rgba(0, 0, 0, 0.35);
-}
-.price { font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5); letter-spacing: 0.2px; }
-.deal.is-owned .price { color: #a6f3c8; }
-.deal-name { font-size: 11px; font-weight: 700; color: #cde6e3; margin-top: 6px; }
-
 /* Dark strip under the nav on scrolling screens, as in the designs */
 .nav-fade { position: absolute; z-index: 9; left: 0; right: 0; top: 748px; height: 96px; pointer-events: none;
   background: linear-gradient(180deg, rgba(7, 21, 31, 0) 0%, rgba(7, 21, 31, 0.85) 25%, #07151f 45%); }
 .phone.on-home .nav-fade, .phone.on-home .statusbar, .phone.own-status .statusbar { display: none; }
-#screen-results, #screen-profile { overflow: hidden; padding: 0; }
+#screen-results, #screen-profile, #screen-market { overflow: hidden; padding: 0; }
 
 /* ---------- Bottom nav (identical on every screen, measured from the designs) ---------- */
 .tabbar {

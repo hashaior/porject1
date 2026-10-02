@@ -21,10 +21,12 @@ The bottom bar is the same on every screen:
 | Tab | Screen |
 | --- | --- |
 | Home | Home with Sharko the guide, tips carousel, Play Now |
-| Wallet | Market with Daily Deals (each price shows once) |
+| Wallet | Market: daily deal, hats/eyes/extras that go straight into the Wardrobe, coin chests |
 | Swords | Matches with search, filters and Create Lobby |
 | Grid | Results: final scores with expandable match details, league and day filters |
-| Profile | Profile with avatar picker, Add Friends and Wardrobe |
+| Profile | Profile with avatar picker, Add Friends, friends list with each friend's stats, and Wardrobe |
+
+On Home, the wheel button next to Sharko opens the Lucky Wheel: one free spin a day, prizes up to 500 coins, some slices win nothing.
 
 What works in the demo:
 - Top up adds coins to the balance
@@ -41,6 +43,8 @@ What works in the demo:
 - `css/results.css`, `css/profile.css` – the styles from `results-screen.html` and `profile-screen_1.html`, scoped to their screens
 - `js/data.js` – the demo data (teams, matches, results, items)
 - `js/app.js` – the app logic
+- `js/market.js`, `css/market.css` – the Market
+- `js/wheel.js`, `css/wheel.css` – the Lucky Wheel
 - `js/auth.js`, `css/auth.css` – loading, sign-in and create-account screens
 - `js/results.js`, `js/profile.js` – the Results and Profile screens, from the two design files
 - `assets/fonts/` – Lilita One, Manrope and Bungee, the fonts used in the designs

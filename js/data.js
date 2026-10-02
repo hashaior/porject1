@@ -89,15 +89,6 @@ const FIXTURES = (() => {
   return out;
 })();
 
-const DEALS = [
-  { id: 'helmet', name: 'Aviator Cap', img: 'assets/img/item-helmet.jpg', price: '$4.99 USD' },
-  { id: 'monocle', name: 'Golden Monocle', img: 'assets/img/item-monocle.jpg', price: '$4.99 USD' },
-  { id: 'beanie', name: 'Deckhand Beanie', img: 'assets/img/item-beanie.jpg', price: '$4.99 USD' },
-  { id: 'goggles', name: 'Neon Goggles', img: 'assets/img/item-goggles.jpg', price: '$4.99 USD' },
-  { id: 'wizard', name: 'Sea Wizard Hat', img: 'assets/img/item-wizard.jpg', price: '$4.99 USD' },
-  { id: 'sunglasses', name: 'Cat-Eye Shades', img: 'assets/img/item-sunglasses.jpg', price: '$4.99 USD' },
-];
-
 const COIN_PACKS = [
   { coins: 500, price: '$4.99', tag: '' },
   { coins: 1200, price: '$9.99', tag: '+20%' },

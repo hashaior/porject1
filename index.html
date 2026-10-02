@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/results.css">
 <link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/market.css">
+<link rel="stylesheet" href="css/wheel.css">
 <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
@@ -38,16 +40,8 @@
     <div class="dots" id="guide-dots"></div>
   </section>
 
-  <!-- MARKET -->
-  <section class="screen screen-market" id="screen-market" data-screen="market">
-    <div class="market-hero">
-      <img src="assets/img/market-header.jpg" alt="">
-    </div>
-    <div class="market-sign"><span class="bolt"></span><h1>Market</h1><span class="bolt"></span></div>
-    <div class="ribbon"><h2>Daily Deals</h2></div>
-    <p class="deals-timer">New deals in <b id="deals-timer">--:--:--</b></p>
-    <div class="deals" id="deals"></div>
-  </section>
+  <!-- MARKET (rendered by js/market.js) -->
+  <section class="screen screen-market" id="screen-market" data-screen="market"></section>
 
   <!-- MATCHES -->
   <section class="screen screen-matches" id="screen-matches" data-screen="matches">
@@ -104,6 +98,8 @@
 <script src="js/app.js"></script>
 <script src="js/results.js"></script>
 <script src="js/profile.js"></script>
+<script src="js/market.js"></script>
+<script src="js/wheel.js"></script>
 <script src="js/auth.js"></script>
 </body>
 </html>
