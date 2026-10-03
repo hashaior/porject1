@@ -84,6 +84,12 @@
     target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
     flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
     bag: '<path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/>',
+    wheel: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 3v7M12 14v7M3 12h7M14 12h7M5.6 5.6l5 5M13.4 13.4l5 5M18.4 5.6l-5 5M10.6 13.4l-5 5"/>',
+    coin: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 9.5v5"/>',
+    chat: '<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/>',
+    crown: '<path d="M3 18 2 7l5 4 5-7 5 7 5-4-1 11z"/>',
+    gem: '<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 21 8 9l4-6 4 6z"/>',
+    cart: '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 8H6"/>',
   };
 
   /* shared chrome */
@@ -138,6 +144,8 @@
   /* ============ SCREEN 1 : PROFILE ============ */
   function profileHTML() {
     const a = ANIMALS[STATE.animal];
+    const st = STATS.view(season);
+    const ach = STATS.achievements(achCtx());
     const friends = FRIENDS.slice(0, 6).map((f) => [f.animal, f.name, f.online ? 1 : 0]);
     return `${rays()}<div class="scroll">${status()}
   <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.toast('Settings are not part of this demo')">${I(P.gear, '#F6D58A', 22)}<span class="dot"></span></div></div>
@@ -160,9 +168,9 @@
     <div class="act green" onclick="PS.openAdd()">${I(P.userplus, '#fff', 22, 2.6)}ADD FRIEND</div>
   </div>
 
-  <div class="sec"><h2>MY STATS</h2><span class="link">This season ▾</span></div>
+  <div class="sec"><h2>MY STATS</h2><span class="link" onclick="PS.toggleSeason()">${season ? 'This season' : 'All time'} ▾</span></div>
   <div class="stats">
-    ${[['ball', '#4DA3FF', '48', 'Matches'], ['trophy', '#F2B84B', '31', 'Wins'], ['target', '#E5484D', '65%', 'Win rate'], ['flag', '#8BEB6E', '12', 'Lobbies']].map(([i, c, v, l]) => `<div class="card stat"><div class="ic" style="background:${c}">${I(P[i], '#1B1230', 20, 2.4)}</div><b>${v}</b><span>${l}</span></div>`).join('')}
+    ${[['ball', '#4DA3FF', fmtN(st.matches), 'Matches'], ['trophy', '#F2B84B', fmtN(st.wins), 'Wins'], ['target', '#E5484D', `${st.matches ? Math.round((st.wins / st.matches) * 100) : 0}%`, 'Win rate'], ['flag', '#8BEB6E', fmtN(st.hosted), 'Lobbies']].map(([i, c, v, l]) => `<div class="card stat"><div class="ic" style="background:${c}">${I(P[i], '#1B1230', 20, 2.4)}</div><b>${v}</b><span>${l}</span></div>`).join('')}
   </div>
 
   <div class="sec"><h2>FRIENDS <span class="chip">${FRIENDS.length}</span></h2><span class="link" onclick="PS.openFriends()">See all ›</span></div>
@@ -176,9 +184,9 @@
     ${[['at', 'Username', '@' + handle()], ['mail', 'Email', 'or.captain@gmail.com'], ['phone', 'Phone', '+972 50-123-4567'], ['globe', 'Country', 'Israel'], ['shirt', 'Favorite team', 'Maccabi Tel Aviv'], ['cake', 'Birthday', '14 March 1998']].map(([i, k, v]) => `<div class="drow"><div class="di">${I(P[i], '#F6D58A', 17, 2.2)}</div><div class="grow"><div class="k">${k}</div><div class="v">${v}</div></div><span class="chev">›</span></div>`).join('')}
   </div>
 
-  <div class="sec"><h2>ACHIEVEMENTS <span class="chip">3/12</span></h2><span class="link">See all ›</span></div>
+  <div class="sec"><h2>ACHIEVEMENTS <span class="chip">${ach.filter((x) => x.done).length}/${ach.length}</span></h2><span class="link" onclick="PS.openAchievements()">See all ›</span></div>
   <div class="ach">
-    ${medal('#F2B84B', '#B8741F', 'trophy', 'First Win')}${medal('#B98CFF', '#6A3FB5', 'flag', 'Party Host')}${medal('#FF8A5B', '#C9303A', 'target', '5 Win Streak')}${medal('#7FD8FF', '#2A6FC9', 'bag', 'Collector', true)}
+    ${ach.slice(0, 4).map((x) => `<div onclick="PS.openAchievements()" style="cursor:pointer">${medal(x.c[0], x.c[1], x.icon, x.name, !x.done)}</div>`).join('')}
   </div>
   <div class="logout" onclick="AUTH.logout()">${I(P.logout, '#FF8A8E', 18, 2.4)} Log out</div>
   </div>`;
@@ -283,13 +291,46 @@
   </div>`;
   }
 
+  /* ============ ACHIEVEMENTS (See all) ============ */
+  let season = true;
+  const fmtN = (n) => n.toLocaleString('en-US');
+  const achCtx = () => ({ owned: STATE.owned.length });
+  function achievementsHTML() {
+    const list = STATS.achievements(achCtx());
+    const done = list.filter((x) => x.done).length;
+    const earned = list.filter((x) => x.claimed).reduce((n, x) => n + x.reward, 0);
+    const toClaim = list.filter((x) => x.done && !x.claimed).length;
+    // Ready to claim first, then in progress, then claimed.
+    const order = (x) => (x.done && !x.claimed ? 0 : !x.done ? 1 : 2);
+    return `${rays()}<div class="scroll">${status()}
+  <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.openProfile()" aria-label="Back">${I('<path d="m15 18-6-6 6-6"/>', '#F6D58A', 24, 2.6)}</div></div>
+  <div class="wtitle"><div class="woodsign"><b>ACHIEVEMENTS</b></div></div>
+  <div class="card ach-sum">
+    <div class="ach-sum-row"><div><small>UNLOCKED</small><b>${done}<span>/${list.length}</span></b></div><div><small>COINS EARNED</small><b class="gold">${fmtN(earned)}</b></div>${toClaim ? `<div class="ach-ready">${toClaim} TO CLAIM</div>` : ''}</div>
+    <div class="ach-bar"><i style="width:${Math.round((done / list.length) * 100)}%"></i></div>
+  </div>
+  <div class="ach-list">${list.slice().sort((x, y) => order(x) - order(y)).map((x) => `
+    <div class="card ach-row ${x.done ? 'done' : ''}">
+      <div class="ach-medal">${medal(x.c[0], x.c[1], x.icon, '', !x.done)}</div>
+      <div class="ach-txt"><b>${x.name}</b><small>${x.desc}</small>
+        <div class="ach-prog"><i style="width:${Math.round((x.progress / x.target) * 100)}%"></i></div>
+        <span class="ach-num">${fmtN(x.progress)} / ${fmtN(x.target)}</span></div>
+      ${x.done && !x.claimed ? `<div class="ach-claim" onclick="PS.claim('${x.id}')">CLAIM<br><span>+${x.reward}</span></div>`
+        : x.claimed ? '<div class="ach-claimed">✓<br>CLAIMED</div>' : `<div class="ach-reward">+${x.reward}<br><span>COINS</span></div>`}
+    </div>`).join('')}</div>
+  </div>`;
+  }
+  const checkAchievements = () => {
+    STATS.newlyDone(achCtx()).forEach((x, i) => setTimeout(() => toast(`🏆 Achievement unlocked: ${x.name}! Claim it in your Profile`), 600 + i * 2800));
+  };
+
   /* ============ RENDER + INTERACTIONS ============ */
   const screen = () => document.getElementById('screen-profile');
   let view = 'profile';
   const render = (keepScroll) => {
     const sc = screen().querySelector('.scroll');
     const top = keepScroll && sc ? sc.scrollTop : 0;
-    screen().innerHTML = view === 'wardrobe' ? wardrobeHTML() : view === 'friends' ? friendsHTML() : profileHTML();
+    screen().innerHTML = view === 'wardrobe' ? wardrobeHTML() : view === 'friends' ? friendsHTML() : view === 'achievements' ? achievementsHTML() : profileHTML();
     screen().querySelector('.scroll').scrollTop = top;
   };
   const openSheet = (html) => { PS.closeSheet(); screen().insertAdjacentHTML('beforeend', html); };
@@ -302,6 +343,16 @@
     setAnimal(k) { STATE.animal = k; save(); render(); },
     openWardrobe() { view = 'wardrobe'; render(); },
     openFriends() { view = 'friends'; render(); },
+    openAchievements() { view = 'achievements'; render(); },
+    toggleSeason() { season = !season; render(true); },
+    claim(id) {
+      const x = STATS.achievements(achCtx()).find((a) => a.id === id);
+      if (!x || !x.done || x.claimed) return;
+      STATS.claim(id); APP.addCoins(x.reward);
+      toast(`+${x.reward} coins for ${x.name}!`);
+    },
+    // Called when you open the Profile tab so stats are always current.
+    refresh() { if (!screen().querySelector('.sheet')) render(true); },
     openFriend(i) { openSheet(friendSheet(i)); },
     friendTab(t) { friendTab = t; render(true); },
     filterFriends(q) { friendQuery = q; document.getElementById('fl-list').innerHTML = friendRows(); },
@@ -316,7 +367,7 @@
     look: () => ({ animal: STATE.animal, hat: STATE.hat, eyes: STATE.eyes, extra: STATE.extra }),
     pedestal: (w) => pedestal(w),
     grant(k) {
-      if (!STATE.owned.includes(k)) STATE.owned.push(k);
+      if (!STATE.owned.includes(k)) { STATE.owned.push(k); setTimeout(checkAchievements, 50); }
       STATE[ITEMS[k].slot] = k; save(); render(true);
     },
     openPicker() { openSheet(pickerHTML(STATE.animal)); },
@@ -350,5 +401,13 @@
     saveLook() { save(); toast('Look saved'); PS.openProfile(); },
   };
 
+  // Stats change from lobbies, the wheel, the market and chat: keep the Profile current and announce new achievements.
+  STATS.onChange(() => {
+    checkAchievements();
+    const scr = screen();
+    if (scr.classList.contains('is-active') && !scr.querySelector('.sheet')) render(true);
+  });
+
   render();
+  checkAchievements();
 })();

@@ -89,11 +89,12 @@ const FIXTURES = (() => {
   return out;
 })();
 
+// One list of coin packs, used by Top up and by the Market's Treasure Chests. Demo: nothing is charged.
 const COIN_PACKS = [
-  { coins: 500, price: '$4.99', tag: '' },
-  { coins: 1200, price: '$9.99', tag: '+20%' },
-  { coins: 2600, price: '$19.99', tag: '+30%' },
-  { coins: 7000, price: '$49.99', tag: 'Best value' },
+  { name: 'Small Chest', coins: 500, price: '$4.99', tag: '' },
+  { name: 'Treasure Chest', coins: 1200, price: '$9.99', tag: '+20%' },
+  { name: 'Mega Chest', coins: 2600, price: '$19.99', tag: '+30%' },
+  { name: 'Legendary Hoard', coins: 7000, price: '$49.99', tag: 'BEST' },
 ];
 
 const GUIDE_LINES = [
@@ -104,10 +105,19 @@ const GUIDE_LINES = [
   ['Win streak bonus!', 'Win 2 more parties this week for +300 coins.'],
 ];
 
+// Lobbies your friends host. You can only join these with their code (no random lobbies).
+// match: index in the match list (1 = Real Madrid vs Barcelona, 0 = Liverpool vs Man City)
+const FRIEND_LOBBIES = {
+  NOA7: { host: 'Noa', match: 1, stake: 250, players: ['Noa', 'Maya', 'Tomer'], joining: ['Eden'] },
+  MAYA: { host: 'Maya', match: 0, stake: 100, players: ['Maya', 'Daniel'], joining: ['Lior', 'Yael'] },
+};
+
+// [title, details, time ago, action]. Actions: 'lobby:CODE' opens that invite, or a screen name.
 const NOTIFICATIONS = [
-  ['Noa invited you to a lobby', 'Real Madrid vs Barcelona · 250 coins', '2m'],
-  ['You won +450 coins', 'Maccabi Haifa 2–1 Maccabi TA', '1h'],
-  ['New Daily Deals', 'Six new items in the Market', '5h'],
+  ['Noa invited you to a lobby', 'Real Madrid vs Barcelona · 250 coins · #NOA7', '2m', 'lobby:NOA7'],
+  ['Maya invited you to a lobby', 'Liverpool vs Man City · 100 coins · #MAYA', '40m', 'lobby:MAYA'],
+  ['You won +450 coins', 'Maccabi Haifa 2–1 Maccabi TA', '1h', 'results'],
+  ['New Daily Deals', 'Fresh gear in the Market', '5h', 'market'],
 ];
 
 const CREW = ['Noa', 'Dan', 'Yoni', 'Maya', 'Avi', 'Tal'];

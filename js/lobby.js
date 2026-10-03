@@ -48,10 +48,10 @@
   const pot = () => joined().length * L.stake;
   const me = () => L.players.find((p) => p.you);
 
-  function create({ matchId, stake, type, invited }) {
+  function create({ matchId, stake, invited, type = 'Private' }) {
     const friends = PS.friends();
     const t = now();
-    const players = [{ name: APP.userName(), you: true, status: 'joined', animal: PS.look().animal, at: t }];
+    const players = [{ name: APP.userName(), you: true, host: true, status: 'joined', animal: PS.look().animal, at: t }];
     invited.slice(0, SEATS - 1).forEach((name) => {
       const f = friends.find((x) => x.name === name) || { name, animal: 'shark', online: true };
       const declines = !f.online && Math.random() < 0.35;
@@ -74,6 +74,26 @@
     return L.code;
   }
 
+  // Join a friend's lobby (from a code or an invite). You take the next free seat; the host is your friend.
+  function join(code, def) {
+    const friends = PS.friends();
+    const info = (n) => friends.find((f) => f.name === n) || { name: n, animal: 'shark', online: true };
+    const t = now();
+    const players = def.players.map((n, i) => ({ name: n, animal: info(n).animal, level: info(n).level, host: i === 0, status: 'joined', at: t }));
+    players.push({ name: APP.userName(), you: true, status: 'joined', animal: PS.look().animal, at: t });
+    def.joining.forEach((n) => players.push({ name: n, animal: info(n).animal, level: info(n).level, status: 'invited', outcome: 'joined', due: t + rand(4000, 12000) }));
+    L = {
+      matchId: def.match, stake: def.stake, type: 'Private', created: t, code, joinedByCode: true,
+      players: players.slice(0, SEATS),
+      chat: [{ sys: true, text: `${def.host} created the lobby` }, { from: def.host, animal: info(def.host).animal, text: 'Welcome aboard, crew! 🦈' }, { sys: true, text: `You joined the lobby · +${fmt(def.stake)} to the pot` }],
+    };
+    save();
+    rendered = false;
+    const host = players[0];
+    setTimeout(() => say(host, `Ahoy ${APP.userName()}! Glad you made it`), 1800);
+    return code;
+  }
+
   /* ---------- simulation ---------- */
   let typing = null; // name of a friend who is typing
   function tick() {
@@ -92,7 +112,10 @@
         }
       }
     });
-    if (changed) { save(); update(); }
+    if (changed) {
+      if (joined().length >= SEATS && !L.fullCounted) { L.fullCounted = true; if (window.STATS) STATS.add('fullHouse'); }
+      save(); update();
+    }
     const cd = $('#lb-countdown'); if (cd) cd.textContent = countdown();
   }
   function say(p, text) {
@@ -109,6 +132,7 @@
     text = text.trim();
     if (!text || !L) return;
     L.chat.push({ from: me().name, you: true, text: text.slice(0, 140) });
+    if (window.STATS) STATS.add('chats');
     save(); drawChat();
     const others = joined().filter((p) => !p.you);
     if (others.length && Math.random() < 0.85) setTimeout(() => say(pickOne(others), pickOne(REPLY_LINES)), rand(900, 1800));
@@ -136,10 +160,10 @@
     for (let i = 0; i < SEATS; i++) {
       const p = L.players[i];
       if (!p) { seats.push(`<button class="seat empty" onclick="LOBBY.invite()"><div class="port"><div class="glass water"><span class="bub b1"></span><span class="bub b2"></span><span class="bub b3"></span>${I(P.plus, '#F6D58A', 26, 3)}</div>${bolts}</div><b>Empty seat</b><span class="tag invite">INVITE</span></button>`); continue; }
-      const tag = p.status === 'joined' ? (p.you ? '<span class="tag host">HOST</span>' : '<span class="tag ready">✓ READY</span>')
+      const tag = p.status === 'joined' ? (p.host ? '<span class="tag host">HOST</span>' : p.you ? '<span class="tag you">YOU</span>' : '<span class="tag ready">✓ READY</span>')
         : p.status === 'invited' ? '<span class="tag joining">JOINING<i>.</i><i>.</i><i>.</i></span>' : '<span class="tag declined">DECLINED</span>';
       seats.push(`<div class="seat ${p.status} ${p.justJoined ? 'pop' : ''}" ${p.status === 'joined' && !p.you ? `onclick="LOBBY.wave('${esc(p.name)}')"` : ''}>
-        <div class="port">${avatar(p)}${bolts}${p.you ? '<span class="crown"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 18 2 7l5 4 5-7 5 7 5-4-1 11z" fill="#F2B84B" stroke="#1B1230" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="14" r="1.8" fill="#E5484D"/></svg></span>' : ''}${p.status === 'invited' ? '<span class="sonar"></span>' : ''}</div>
+        <div class="port">${avatar(p)}${bolts}${p.host ? '<span class="crown"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 18 2 7l5 4 5-7 5 7 5-4-1 11z" fill="#F2B84B" stroke="#1B1230" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="14" r="1.8" fill="#E5484D"/></svg></span>' : ''}${p.status === 'invited' ? '<span class="sonar"></span>' : ''}</div>
         <b>${esc(p.you ? 'You' : p.name)}</b>${tag}</div>`);
       p.justJoined = false;
     }
@@ -188,7 +212,7 @@
       </div>
 
       <div class="ticket">
-        <div class="t-top"><span class="lg" style="--dot:${lg.color}">${esc(lg.name)}</span><span class="t-type">${L.type.toUpperCase()} LOBBY</span></div>
+        <div class="t-top"><span class="lg" style="--dot:${lg.color}">${esc(lg.name)}</span><span class="t-type">${L.joinedByCode ? `${esc(L.players.find((x) => x.host).name.toUpperCase())}'S LOBBY` : 'YOUR LOBBY'}</span></div>
         <div class="t-teams">
           <div class="t-team">${crest(m.home, 56)}<b>${esc(TEAMS[m.home][0])}</b></div>
           <div class="t-vs"><span>VS</span><small>${esc(APP.whenLabel(m))}</small></div>
@@ -259,6 +283,8 @@
 
   window.LOBBY = {
     create,
+    join,
+    code: () => (L ? L.code : ''),
     isActive: () => !!L,
     onShow() {
       if (!L) return;
@@ -287,6 +313,7 @@
       const p = { name: f.name, animal: f.animal, level: f.level, status: 'invited', outcome: 'joined', due: now() + (f.online ? rand(2500, 6000) : rand(8000, 15000)) };
       if (di !== -1) L.players.splice(di, 1, p); else L.players.push(p);
       L.chat.push({ sys: true, text: `You invited ${f.name}` });
+      if (window.STATS) STATS.add('invites');
       save(); closeSheet(); update(); toast(`Invite sent to ${f.name}`);
     },
     leave() {
@@ -295,6 +322,8 @@
     },
     confirmLeave() {
       APP.addCoins(L.stake);
+      // The party was not played, so it does not count in your stats.
+      if (window.STATS) { STATS.add('matches', -1); if (me().host) STATS.add('hosted', -1); }
       const code = L.code;
       L = null; rendered = false; save();
       screen().innerHTML = '';

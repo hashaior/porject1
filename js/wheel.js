@@ -128,6 +128,7 @@
   function finish(i) {
     spinning = false;
     memory = { last: today() }; saveSpin(memory);
+    if (window.STATS) { STATS.add('spins'); STATS.max('wheelBest', SLICES[i].coins); }
     refreshButton();
     document.getElementById('wm-wheel').classList.remove('spinning');
     document.getElementById('wm-foot').innerHTML = footer();

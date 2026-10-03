@@ -7,6 +7,13 @@
     home: S('<path d="M3.5 10.5 12 3.5l8.5 7V19a1.5 1.5 0 0 1-1.5 1.5h-4.5V15h-5v5.5H5A1.5 1.5 0 0 1 3.5 19z"/>'),
     wallet: S('<path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4h-12A2.5 2.5 0 0 0 3 6.5v11A2.5 2.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-10A1.5 1.5 0 0 0 18.5 7H5.5A2.5 2.5 0 0 1 3 4.5"/><path d="M16 13.5h.01"/>'),
     swords: S('<path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/><path d="m5 14 4 4"/><path d="m7 17-3 3"/><path d="m3 19 2 2"/>'),
+    results: S('<rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M7.5 9v6M16.5 9v6M12 10.2v.01M12 13.8v.01"/><path d="M9 5V3M15 5V3"/>'),
+    key: S('<circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.3-9.3M17 6l3 3M14.5 8.5l2 2"/>', 'stroke-width="2.4"'),
+    x: S('<path d="M6 6l12 12M18 6 6 18"/>', 'stroke-width="3.2"'),
+    check: S('<path d="M5 12.5 10 17 19 7"/>', 'stroke-width="3.4"'),
+    userplus: S('<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3.1-6 7-6s7 2 7 6"/><path d="M19 8v6M16 11h6"/>'),
+    trophy: S('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'),
+    bag: S('<path d="M6 7h12l1 13H5z"/><path d="M9 7a3 3 0 0 1 6 0"/>'),
     grid: S('<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>'),
     user: S('<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>'),
     bell: S('<path d="M6 8.5a6 6 0 0 1 12 0c0 6.5 2.5 8.5 2.5 8.5h-17S6 15 6 8.5"/><path d="M10.3 20.5a2 2 0 0 0 3.4 0"/>'),
@@ -82,12 +89,14 @@
     $('#phone').classList.toggle('own-status', inLobby || name === 'results' || name === 'profile' || name === 'market');
     if (inLobby) LOBBY.onShow();
     if (name === 'market' && window.MK) MK.render();
+    if (name === 'profile' && window.PS && PS.refresh) PS.refresh();
     if (location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
   };
 
   // ---------- Sheet ----------
-  const openSheet = (html, onMount) => {
-    $('#sheet-body').innerHTML = html;
+  const openSheet = (plate, html, onMount) => {
+    $('#sheet-body').innerHTML = `<div class="ds-plate">${plate}</div><button class="ds-close" type="button" aria-label="Close">${icon('x')}</button>${html}`;
+    $('#sheet-body .ds-close').onclick = () => closeSheet();
     paintIcons($('#sheet'));
     $('#sheet').hidden = false;
     $('#sheet-scrim').hidden = false;
@@ -99,27 +108,33 @@
     $$('.screen .dim, .screen .sheet').forEach((n) => n.remove());
   };
 
+  // ---------- Treasure chest art (shared by Top up and the Market) ----------
+  const chestArt = (coins) => `<svg viewBox="0 0 84 84" width="100%" height="100%"><defs><linearGradient id="cb${coins}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B57443"/><stop offset="1" stop-color="#6E3D1D"/></linearGradient><linearGradient id="cl${coins}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98552"/><stop offset="1" stop-color="#8E5129"/></linearGradient></defs>
+    ${coins >= 1200 ? '<circle cx="24" cy="30" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/><circle cx="60" cy="28" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/>' : ''}
+    ${coins >= 2600 ? '<circle cx="42" cy="20" r="9" fill="#FFE59A" stroke="#1B1230" stroke-width="2.2"/><circle cx="34" cy="26" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/><circle cx="50" cy="26" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/>' : ''}
+    ${coins >= 7000 ? '<path d="M30 14l4-8 4 6 4-8 4 8 4-6 4 8z" fill="#F2B84B" stroke="#1B1230" stroke-width="2" stroke-linejoin="round"/>' : ''}
+    <path d="M10 44h64v24a7 7 0 0 1-7 7H17a7 7 0 0 1-7-7z" fill="url(#cb${coins})" stroke="#1B1230" stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M10 44c0-12 14-18 32-18s32 6 32 18z" fill="url(#cl${coins})" stroke="#1B1230" stroke-width="2.6" stroke-linejoin="round"/>
+    <rect x="8" y="41" width="68" height="8" rx="3" fill="#F2C14E" stroke="#1B1230" stroke-width="2.4"/>
+    <path d="M24 49v24M60 49v24" stroke="#3A1D0B" stroke-width="2.4"/>
+    <rect x="35" y="47" width="14" height="15" rx="3.5" fill="#F2C14E" stroke="#1B1230" stroke-width="2.4"/><circle cx="42" cy="54" r="2.2" fill="#1B1230"/>
+    <path d="M18 34q8-5 18-6" stroke="#fff" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
+  const coinIc = (sz = 14) => `<svg width="${sz}" height="${sz}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#F2B84B" stroke="#1B1230" stroke-width="2"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B8741F" stroke-width="1.6"/><path d="m12 8 1.2 2.5 2.7.4-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.4z" fill="#FFF4C9"/></svg>`;
+  const buyPack = (i) => {
+    const p = COIN_PACKS[i];
+    state.balance += p.coins; save(); renderBalance();
+    toast(`+${fmt(p.coins)} coins from the ${p.name} (demo, no charge)`);
+  };
+  const packsHTML = () => COIN_PACKS.map((p, i) => `<button class="ds-pack" data-pack="${i}">${p.tag ? `<span class="ds-tag ${p.tag === 'BEST' ? 'best' : ''}">${p.tag}</span>` : ''}
+      <span class="ds-chest">${chestArt(p.coins)}</span><b>${coinIc(15)}${fmt(p.coins)}</b><small>${p.name}</small><span class="ds-price">${p.price}</span></button>`).join('');
+
   // ---------- Top up ----------
   const openTopUp = () => {
-    openSheet(`
-      <h3>Top up</h3>
-      <p class="sub">Add coins to your balance. Demo only, no payment is taken.</p>
-      <div class="packs">
-        ${COIN_PACKS.map((p, i) => `
-          <div class="pack">
-            ${p.tag ? `<span class="tag">${p.tag}</span>` : ''}
-            <span class="coin">${icon('star')}</span>
-            <b>${fmt(p.coins)}</b>
-            <button class="btn-gold" data-pack="${i}">${p.price}</button>
-          </div>`).join('')}
-      </div>`, (body) => {
-      body.addEventListener('click', (e) => {
-        const b = e.target.closest('[data-pack]');
-        if (!b) return;
-        const p = COIN_PACKS[+b.dataset.pack];
-        state.balance += p.coins; save(); renderBalance(); closeSheet();
-        toast(`+${fmt(p.coins)} coins added`);
-      });
+    openSheet('TOP UP', `
+      <p class="ds-sub">Your balance: <b>${coinIc(14)} ${fmt(state.balance)}</b></p>
+      <div class="ds-packs">${packsHTML()}</div>
+      <p class="ds-note">Same chests as in the Market. Demo store, nothing is charged.</p>`, (body) => {
+      body.querySelectorAll('[data-pack]').forEach((b) => { b.onclick = () => { buyPack(+b.dataset.pack); closeSheet(); }; });
     });
   };
 
@@ -128,8 +143,20 @@
   const toggleNotifs = () => {
     const pop = $('#notif-pop');
     if (!pop.hidden) { pop.hidden = true; return; }
-    pop.innerHTML = `<h3>Notifications</h3>` + NOTIFICATIONS.map(([t, s, ago]) =>
-      `<div class="notif"><b>${esc(t)}</b><time>${ago}</time><small>${esc(s)}</small></div>`).join('');
+    const kind = (a) => (a.startsWith('lobby:') ? ['invite', 'userplus'] : a === 'results' ? ['win', 'trophy'] : ['deal', 'bag']);
+    pop.innerHTML = `<div class="np-head"><h3>Notifications</h3><span>${NOTIFICATIONS.length}</span></div>` + NOTIFICATIONS.map(([t, sub, ago, act], i) => {
+      const [k, ic] = kind(act);
+      return `<button class="notif ${k}" data-notif="${i}"><span class="n-ic">${icon(ic)}</span><span class="n-txt"><b>${esc(t)}</b><small>${esc(sub)}</small></span><span class="n-side"><time>${ago}</time>${k === 'invite' ? '<em>VIEW</em>' : '<i class="n-chev">›</i>'}</span></button>`;
+    }).join('');
+    paintIcons(pop);
+    pop.querySelectorAll('[data-notif]').forEach((b) => {
+      b.onclick = () => {
+        const act = NOTIFICATIONS[+b.dataset.notif][3];
+        pop.hidden = true;
+        if (act.startsWith('lobby:')) previewLobby(act.slice(6));
+        else go(act);
+      };
+    });
     pop.hidden = false;
     state.notifSeen = true; save(); renderBell();
   };
@@ -283,6 +310,7 @@
   }
 
   const initMatches = () => {
+    $('#join-code-btn').addEventListener('click', () => openJoinCode());
     $('#search-input').addEventListener('input', (e) => { query = e.target.value.trim().toLowerCase(); renderMatches(); });
     $('#filter-btn').addEventListener('click', () => ($('#filter-panel').hidden ? openFilters() : closeFilters(false)));
     $('#filter-scrim').addEventListener('click', () => closeFilters(false));
@@ -312,46 +340,105 @@
 
   // ---------- Create lobby ----------
   const STAKES = [100, 250, 500, 1000];
+  const alreadyInLobby = () => {
+    if (window.LOBBY && LOBBY.isActive()) { toast(`You're already in lobby #${LOBBY.code()}. Leave it first.`); go('matches'); return true; }
+    return false;
+  };
   const openLobby = (m) => {
-    const friends = window.PS && PS.friends ? PS.friends().slice(0, 8) : CREW.map((n) => ({ name: n, online: true }));
+    if (alreadyInLobby()) return;
+    const friends = window.PS && PS.friends ? PS.friends().slice(0, 8) : CREW.map((n) => ({ name: n, online: true, animal: 'shark' }));
     const MAX_INVITES = 5; // 6 seats: you + 5 friends
-    const lobby = { stake: 250, type: 'Private', crew: new Set(friends.filter((f) => f.online).slice(0, 3).map((f) => f.name)) };
+    const lobby = { stake: 250, crew: new Set(friends.filter((f) => f.online).slice(0, 3).map((f) => f.name)) };
+    const av = (k) => (window.PS && PS.animal ? PS.animal(k) : '');
     const render = (body) => {
-      body.innerHTML = `
-        <h3>Create lobby</h3>
-        <p class="sub">${esc(LEAGUES[m.league].name)} · ${upcomingLabel(m.offset, m.time)}</p>
+      body.querySelector('.ds-body').innerHTML = `
+        <p class="ds-sub">${esc(LEAGUES[m.league].name)} · ${upcomingLabel(m.offset, m.time)}</p>
         <div class="sheet-match">${team(m.home)}<span class="vs">VS</span>${team(m.away)}</div>
-        <h4>Entry per player</h4>
-        <div class="chips">${STAKES.map((s) => chip(`${fmt(s)} coins`, lobby.stake === s, `data-stake="${s}"`)).join('')}</div>
-        <h4>Lobby type</h4>
-        <div class="chips">${['Private', 'Public'].map((t) => chip(t, lobby.type === t, `data-type="${t}"`)).join('')}</div>
-        <h4>Invite your crew · ${lobby.crew.size}/${MAX_INVITES}</h4>
-        <div class="chips">${friends.map((f) => chip(`${f.online ? '● ' : ''}${f.name}`, lobby.crew.has(f.name), `data-crew="${esc(f.name)}"`)).join('')}</div>
-        <button class="btn-gold cta" data-create>Create lobby · ${fmt(lobby.stake)}</button>
-        <p class="note">Your balance: ${fmt(state.balance)} coins</p>`;
+        <h4 class="ds-h">ENTRY PER PLAYER</h4>
+        <div class="ds-stakes">${STAKES.map((v) => `<button class="ds-stake ${lobby.stake === v ? 'on' : ''}" data-stake="${v}">${coinIc(16)}${fmt(v)}</button>`).join('')}</div>
+        <h4 class="ds-h">INVITE YOUR CREW <span class="ds-count">${lobby.crew.size}/${MAX_INVITES}</span></h4>
+        <div class="ds-crew">${friends.map((f) => `<button class="ds-mate ${lobby.crew.has(f.name) ? 'on' : ''}" data-crew="${esc(f.name)}"><span class="ds-av">${av(f.animal)}${f.online ? '<i class="ds-on"></i>' : ''}${lobby.crew.has(f.name) ? `<i class="ds-tick">${icon('check')}</i>` : ''}</span><span>${esc(f.name)}</span></button>`).join('')}</div>
+        <p class="ds-hint">${icon('key')} Private lobby. Friends join with your lobby code.</p>
+        <button class="ds-big" data-create>CREATE LOBBY · ${coinIc(20)} ${fmt(lobby.stake)}</button>
+        <p class="ds-note">Your balance: ${fmt(state.balance)} coins</p>`;
+      paintIcons(body);
     };
-    openSheet('', (body) => {
+    openSheet('CREATE LOBBY', '<div class="ds-body"></div>', (body) => {
       render(body);
-      body.onclick = (e) => {
+      body.querySelector('.ds-body').onclick = (e) => {
         const b = e.target.closest('button');
         if (!b) return;
         if (b.dataset.stake) lobby.stake = +b.dataset.stake;
-        else if (b.dataset.type) lobby.type = b.dataset.type;
         else if (b.dataset.crew) {
           const c = b.dataset.crew;
           if (lobby.crew.has(c)) lobby.crew.delete(c);
           else if (lobby.crew.size >= MAX_INVITES) { toast('The lobby has 6 seats. Remove someone first.'); return; }
           else lobby.crew.add(c);
-        }
-        else if ('create' in b.dataset) {
-          if (state.balance < lobby.stake) { toast('Not enough coins. Top up to join this lobby.'); return; }
+        } else if ('create' in b.dataset) {
+          if (state.balance < lobby.stake) { toast('Not enough coins. Top up to create this lobby.'); return; }
           state.balance -= lobby.stake; save(); renderBalance(); closeSheet();
-          const code = window.LOBBY ? LOBBY.create({ matchId: m.id, stake: lobby.stake, type: lobby.type, invited: [...lobby.crew] }) : '';
+          const code = LOBBY.create({ matchId: m.id, stake: lobby.stake, invited: [...lobby.crew] });
+          if (window.STATS) { STATS.add('hosted'); STATS.add('matches'); STATS.add('invites', lobby.crew.size); if (lobby.stake >= 1000) STATS.add('highRoller'); }
           go('matches');
-          toast(`Lobby ${code} created · waiting for your crew`);
+          toast(`Lobby #${code} created · waiting for your crew`);
           return;
         }
         render(body);
+      };
+    });
+  };
+
+  // ---------- Join a friend's lobby with a code ----------
+  const openJoinCode = (prefill = '') => {
+    if (alreadyInLobby()) return;
+    openSheet('JOIN A LOBBY', `
+      <p class="ds-sub">Enter the code your friend sent you.</p>
+      <form class="ds-codeform" id="join-form" novalidate>
+        <input id="join-code" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD" value="${esc(prefill)}" aria-label="Lobby code">
+        <p class="ds-err" id="join-err"></p>
+        <button class="ds-big" type="submit">${icon('key')} FIND LOBBY</button>
+      </form>
+      <p class="ds-note">Codes come with an invite in your notifications (the bell on Home).</p>`, (body) => {
+      paintIcons(body);
+      const inp = body.querySelector('#join-code');
+      inp.oninput = () => { inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, ''); body.querySelector('#join-err').textContent = ''; };
+      setTimeout(() => inp.focus(), 50);
+      body.querySelector('#join-form').onsubmit = (e) => {
+        e.preventDefault();
+        const code = inp.value.trim().toUpperCase();
+        const err = body.querySelector('#join-err');
+        if (code.length !== 4) { err.textContent = 'Lobby codes have 4 characters.'; return; }
+        if (!FRIEND_LOBBIES[code]) { err.textContent = `No lobby found with code #${code}. Check the code and try again.`; return; }
+        previewLobby(code);
+      };
+    });
+  };
+  const previewLobby = (code) => {
+    if (alreadyInLobby()) return;
+    const def = FRIEND_LOBBIES[code];
+    const m = MATCHES[def.match];
+    const fr = window.PS && PS.friends ? PS.friends() : [];
+    const animalOf = (n) => (fr.find((f) => f.name === n) || { animal: 'shark' }).animal;
+    const av = (n) => (window.PS && PS.animal ? PS.animal(animalOf(n)) : '');
+    const count = def.players.length;
+    openSheet(`${esc(def.host.toUpperCase())}'S LOBBY`, `
+      <p class="ds-sub">${esc(LEAGUES[m.league].name)} · ${upcomingLabel(m.offset, m.time)} · <b class="ds-code">#${code}</b></p>
+      <div class="sheet-match">${team(m.home)}<span class="vs">VS</span>${team(m.away)}</div>
+      <h4 class="ds-h">CREW <span class="ds-count">${count}/6</span></h4>
+      <div class="ds-crew">${def.players.map((n) => `<div class="ds-mate on"><span class="ds-av">${av(n)}${n === def.host ? '<i class="ds-host">HOST</i>' : ''}</span><span>${esc(n)}</span></div>`).join('')}
+        ${def.joining.map((n) => `<div class="ds-mate wait"><span class="ds-av">${av(n)}</span><span>${esc(n)}</span></div>`).join('')}
+        <div class="ds-mate you"><span class="ds-av ds-seat">${icon('userplus')}</span><span>You</span></div></div>
+      <div class="ds-row"><div><small>ENTRY</small><b>${coinIc(16)} ${fmt(def.stake)}</b></div><div><small>POT SO FAR</small><b>${coinIc(16)} ${fmt(def.stake * count)}</b></div></div>
+      <button class="ds-big" id="join-go">JOIN · ${coinIc(20)} ${fmt(def.stake)}</button>
+      <p class="ds-note">Your balance: ${fmt(state.balance)} coins</p>`, (body) => {
+      paintIcons(body);
+      body.querySelector('#join-go').onclick = () => {
+        if (state.balance < def.stake) { closeSheet(); toast('Not enough coins to join. Top up first.'); openTopUp(); return; }
+        state.balance -= def.stake; save(); renderBalance(); closeSheet();
+        LOBBY.join(code, def);
+        if (window.STATS) { STATS.add('matches'); STATS.add('joinedByCode'); if (def.stake >= 1000) STATS.add('highRoller'); }
+        go('matches');
+        toast(`You joined ${def.host}'s lobby #${code}`);
       };
     });
   };
@@ -392,6 +479,7 @@
     balance: () => state.balance,
     spend(n) { if (state.balance < n) return false; state.balance -= n; save(); renderBalance(); return true; },
     topUp: () => openTopUp(),
+    chestArt, packs: () => COIN_PACKS, buyPack, joinCode: openJoinCode,
     match: (id) => MATCHES[id],
     whenLabel: (m) => upcomingLabel(m.offset, m.time),
     kickoff(m) { const d = new Date(); d.setDate(d.getDate() + m.offset); const [h, mi] = m.time.split(':'); d.setHours(+h, +mi, 0, 0); return d; },

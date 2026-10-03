@@ -23,14 +23,16 @@ The bottom bar is the same on every screen:
 | Home | Home with Sharko the guide, tips carousel, Play Now |
 | Wallet | Market: daily deal, hats/eyes/extras that go straight into the Wardrobe, coin chests |
 | Swords | Matches with search, filters and Create Lobby. After you create a lobby, this tab becomes the lobby waiting room (crew seats, total pot, scoreboard, chat) until you leave |
-| Grid | Results: final scores with expandable match details, league and day filters |
+| Scoreboard | Results: final scores with expandable match details, league and day filters |
 | Profile | Profile with avatar picker, Add Friends, friends list with each friend's stats, and Wardrobe |
 
 On Home, the wheel button next to Sharko opens the Lucky Wheel: one free spin a day, prizes up to 500 coins, some slices win nothing.
 
 What works in the demo:
 - Top up adds coins to the balance
-- Create Lobby takes the entry coins and creates a lobby code
+- Create Lobby takes the entry coins and creates a private lobby with a code
+- Join with code (Matches screen) or tap an invite in the notifications. Demo codes: NOA7, MAYA
+- Top up and the Market's Treasure Chests sell the same coin packs
 - Profile: pick an animal avatar, equip hats and glasses in the Wardrobe (saved in the browser)
 - Results: tap a match to expand it, filter by league or day
 - The filters and search on Matches update the list and the count
@@ -43,6 +45,7 @@ What works in the demo:
 - `css/results.css`, `css/profile.css` – the styles from `results-screen.html` and `profile-screen_1.html`, scoped to their screens
 - `js/data.js` – the demo data (teams, matches, results, items)
 - `js/app.js` – the app logic
+- `js/stats.js` – your stats and the 12 achievements (they update from lobbies, the wheel, the Market and chat)
 - `js/market.js`, `css/market.css` – the Market
 - `js/wheel.js`, `css/wheel.css` – the Lucky Wheel
 - `js/lobby.js`, `css/lobby.css` – the lobby waiting room

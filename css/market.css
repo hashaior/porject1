@@ -63,7 +63,7 @@
 #screen-market .sec{margin:24px 16px 10px;display:flex;justify-content:space-between;align-items:baseline}
 #screen-market .sec h2{font:18px 'Lilita One';letter-spacing:.04em;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5)}
 #screen-market .sec-note{font-size:11px;font-weight:700;color:var(--dim)}
-#screen-market .chests{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 16px}
+#screen-market .chests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px;margin:0 16px}
 #screen-market .chest{position:relative;border-radius:18px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:linear-gradient(180deg,rgba(18,58,71,.92),rgba(10,31,42,.92));border:1px solid rgba(246,213,138,.28)}
 #screen-market .chest-art{width:70px;height:70px}
 #screen-market .chest b{display:flex;align-items:center;gap:4px;font:16px 'Lilita One';color:#F6D58A;font-weight:400}

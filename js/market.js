@@ -15,21 +15,7 @@
   const fmt = (n) => n.toLocaleString('en-US');
   const SLOT = { hat: 'HAT', eyes: 'EYES', extra: 'EXTRA' };
 
-  // Treasure chests (coin packs). Demo: no payment is taken.
-  const chest = (coins) => `<svg viewBox="0 0 84 84" width="100%" height="100%"><defs><linearGradient id="cb${coins}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B57443"/><stop offset="1" stop-color="#6E3D1D"/></linearGradient><linearGradient id="cl${coins}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98552"/><stop offset="1" stop-color="#8E5129"/></linearGradient></defs>
-    ${coins >= 1200 ? '<circle cx="24" cy="30" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/><circle cx="60" cy="28" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/>' : ''}
-    ${coins >= 2600 ? '<circle cx="42" cy="20" r="9" fill="#FFE59A" stroke="#1B1230" stroke-width="2.2"/><circle cx="34" cy="26" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/><circle cx="50" cy="26" r="8" fill="#F2B84B" stroke="#1B1230" stroke-width="2.2"/>' : ''}
-    <path d="M10 44h64v24a7 7 0 0 1-7 7H17a7 7 0 0 1-7-7z" fill="url(#cb${coins})" stroke="#1B1230" stroke-width="2.6" stroke-linejoin="round"/>
-    <path d="M10 44c0-12 14-18 32-18s32 6 32 18z" fill="url(#cl${coins})" stroke="#1B1230" stroke-width="2.6" stroke-linejoin="round"/>
-    <rect x="8" y="41" width="68" height="8" rx="3" fill="#F2C14E" stroke="#1B1230" stroke-width="2.4"/>
-    <path d="M24 49v24M60 49v24" stroke="#3A1D0B" stroke-width="2.4"/>
-    <rect x="35" y="47" width="14" height="15" rx="3.5" fill="#F2C14E" stroke="#1B1230" stroke-width="2.4"/><circle cx="42" cy="54" r="2.2" fill="#1B1230"/>
-    <path d="M18 34q8-5 18-6" stroke="#fff" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
-  const CHESTS = [
-    { name: 'Small Chest', coins: 500, price: '$4.99', tag: '' },
-    { name: 'Treasure Chest', coins: 1200, price: '$9.99', tag: '+20%' },
-    { name: 'Mega Chest', coins: 2600, price: '$19.99', tag: 'BEST' },
-  ];
+  // Treasure chests: the same packs as Top up (COIN_PACKS in data.js).
 
   let tab = 'ALL';
   const forSale = () => PS.marketItems();
@@ -80,8 +66,8 @@
       <div class="art">${PS.item(k)}</div><div class="nm">${it.n}</div>${tag(k)}</div>`; }).join('')}</div>
 
     <div class="sec"><h2>TREASURE CHESTS</h2><span class="sec-note">Coins for parties &amp; gear</span></div>
-    <div class="chests">${CHESTS.map((c, i) => `<div class="chest" onclick="MK.chest(${i})">${c.tag ? `<span class="chest-tag ${c.tag === 'BEST' ? 'best' : ''}">${c.tag}</span>` : ''}
-      <div class="chest-art">${chest(c.coins)}</div><b>${coinIc(14)}${fmt(c.coins)}</b><small>${c.name}</small><div class="chest-btn">${c.price}</div></div>`).join('')}</div>
+    <div class="chests">${APP.packs().map((c, i) => `<div class="chest" onclick="MK.chest(${i})">${c.tag ? `<span class="chest-tag ${c.tag === 'BEST' ? 'best' : ''}">${c.tag}</span>` : ''}
+      <div class="chest-art">${APP.chestArt(c.coins)}</div><b>${coinIc(14)}${fmt(c.coins)}</b><small>${c.name}</small><div class="chest-btn">${c.price}</div></div>`).join('')}</div>
     <p class="mk-note">Demo store. Nothing is charged.</p>
     </div>`;
   }
@@ -122,12 +108,13 @@
     buy(k) {
       const price = priceOf(k);
       if (!APP.spend(price)) { MK.open(k); return; }
+      if (window.STATS) STATS.add('coinsSpent', price);
       PS.grant(k);
       MK.close(); render(true);
       APP.toast(`${PS.itemInfo(k).n} is in your Wardrobe and on your avatar`);
     },
     wear(k) { PS.grant(k); MK.close(); render(true); APP.toast(`Wearing ${PS.itemInfo(k).n}`); },
-    chest(i) { const c = CHESTS[i]; APP.addCoins(c.coins); APP.toast(`+${fmt(c.coins)} coins from the ${c.name} (demo, no charge)`); },
+    chest(i) { APP.buyPack(i); },
     wardrobe() { APP.go('profile'); PS.openWardrobe(); },
   };
 

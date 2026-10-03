@@ -201,3 +201,4 @@
 /* Matches tab shows a green dot while you are in a lobby */
 #tabbar [data-go="matches"].has-lobby{position:relative}
 #tabbar [data-go="matches"].has-lobby::after{content:"";position:absolute;top:5px;right:9px;width:10px;height:10px;border-radius:50%;background:#4ADE80;border:2px solid #0C1B22;animation:lb-ping 1.6s ease-out infinite}
+#screen-lobby .tag.you{background:linear-gradient(180deg,#FCE39A,#DB952F);color:var(--goldTxt)}
