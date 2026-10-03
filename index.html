@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/profile.css">
 <link rel="stylesheet" href="css/market.css">
 <link rel="stylesheet" href="css/wheel.css">
+<link rel="stylesheet" href="css/lobby.css">
 <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
@@ -70,6 +71,9 @@
     </div>
   </section>
 
+  <!-- LOBBY WAITING ROOM (replaces Matches while you are in a lobby; rendered by js/lobby.js) -->
+  <section class="screen screen-lobby" id="screen-lobby" data-screen="lobby"></section>
+
   <!-- RESULTS (from results-screen.html, rendered by js/results.js) -->
   <section class="screen screen-results" id="screen-results" data-screen="results"></section>
 
@@ -100,6 +104,7 @@
 <script src="js/profile.js"></script>
 <script src="js/market.js"></script>
 <script src="js/wheel.js"></script>
+<script src="js/lobby.js"></script>
 <script src="js/auth.js"></script>
 </body>
 </html>

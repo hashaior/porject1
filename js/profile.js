@@ -310,6 +310,7 @@
     item: (k) => item(k),
     itemInfo: (k) => ({ ...ITEMS[k], rarity: RARITY[ITEMS[k].r] }),
     marketItems: () => Object.keys(ITEMS),
+    friends: () => FRIENDS.map((f) => ({ name: f.name, animal: f.animal, online: f.online, level: f.level })),
     owns: (k) => STATE.owned.includes(k),
     wearing: (k, hat, eyes, extra) => wearing(k, hat, eyes, extra),
     look: () => ({ animal: STATE.animal, hat: STATE.hat, eyes: STATE.eyes, extra: STATE.extra }),

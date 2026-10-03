@@ -71,12 +71,16 @@
   const go = (name) => {
     if (!SCREENS.includes(name)) name = 'home';
     closeOverlays();
-    $$('.screen').forEach((s) => s.classList.toggle('is-active', s.dataset.screen === name));
+    // While you are in a lobby, the Matches tab shows the lobby waiting room instead of the match list.
+    const inLobby = name === 'matches' && window.LOBBY && LOBBY.isActive();
+    const shown = inLobby ? 'lobby' : name;
+    $$('.screen').forEach((s) => s.classList.toggle('is-active', s.dataset.screen === shown));
     $$('#tabbar button').forEach((b) => b.classList.toggle('is-active', b.dataset.go === name));
-    const scr = $(`#screen-${name}`);
-    if (scr) { scr.scrollTop = 0; const inner = $('.scroll', scr); if (inner) inner.scrollTop = 0; }
+    const scr = $(`#screen-${shown}`);
+    if (scr && !inLobby) { scr.scrollTop = 0; const inner = $('.scroll', scr); if (inner) inner.scrollTop = 0; }
     $('#phone').classList.toggle('on-home', name === 'home');
-    $('#phone').classList.toggle('own-status', name === 'results' || name === 'profile' || name === 'market');
+    $('#phone').classList.toggle('own-status', inLobby || name === 'results' || name === 'profile' || name === 'market');
+    if (inLobby) LOBBY.onShow();
     if (name === 'market' && window.MK) MK.render();
     if (location.hash !== `#${name}`) history.replaceState(null, '', `#${name}`);
   };
@@ -309,7 +313,9 @@
   // ---------- Create lobby ----------
   const STAKES = [100, 250, 500, 1000];
   const openLobby = (m) => {
-    const lobby = { stake: 250, type: 'Private', crew: new Set(['Noa', 'Dan']) };
+    const friends = window.PS && PS.friends ? PS.friends().slice(0, 8) : CREW.map((n) => ({ name: n, online: true }));
+    const MAX_INVITES = 5; // 6 seats: you + 5 friends
+    const lobby = { stake: 250, type: 'Private', crew: new Set(friends.filter((f) => f.online).slice(0, 3).map((f) => f.name)) };
     const render = (body) => {
       body.innerHTML = `
         <h3>Create lobby</h3>
@@ -319,8 +325,8 @@
         <div class="chips">${STAKES.map((s) => chip(`${fmt(s)} coins`, lobby.stake === s, `data-stake="${s}"`)).join('')}</div>
         <h4>Lobby type</h4>
         <div class="chips">${['Private', 'Public'].map((t) => chip(t, lobby.type === t, `data-type="${t}"`)).join('')}</div>
-        <h4>Invite your crew</h4>
-        <div class="chips">${CREW.map((c) => chip(c, lobby.crew.has(c), `data-crew="${c}"`)).join('')}</div>
+        <h4>Invite your crew · ${lobby.crew.size}/${MAX_INVITES}</h4>
+        <div class="chips">${friends.map((f) => chip(`${f.online ? '● ' : ''}${f.name}`, lobby.crew.has(f.name), `data-crew="${esc(f.name)}"`)).join('')}</div>
         <button class="btn-gold cta" data-create>Create lobby · ${fmt(lobby.stake)}</button>
         <p class="note">Your balance: ${fmt(state.balance)} coins</p>`;
     };
@@ -331,13 +337,18 @@
         if (!b) return;
         if (b.dataset.stake) lobby.stake = +b.dataset.stake;
         else if (b.dataset.type) lobby.type = b.dataset.type;
-        else if (b.dataset.crew) { const c = b.dataset.crew; lobby.crew.has(c) ? lobby.crew.delete(c) : lobby.crew.add(c); }
+        else if (b.dataset.crew) {
+          const c = b.dataset.crew;
+          if (lobby.crew.has(c)) lobby.crew.delete(c);
+          else if (lobby.crew.size >= MAX_INVITES) { toast('The lobby has 6 seats. Remove someone first.'); return; }
+          else lobby.crew.add(c);
+        }
         else if ('create' in b.dataset) {
           if (state.balance < lobby.stake) { toast('Not enough coins. Top up to join this lobby.'); return; }
           state.balance -= lobby.stake; save(); renderBalance(); closeSheet();
-          const code = Math.random().toString(36).slice(2, 6).toUpperCase();
-          const invited = lobby.crew.size ? ` · ${lobby.crew.size} invited` : '';
-          toast(`Lobby ${code} created${invited}`);
+          const code = window.LOBBY ? LOBBY.create({ matchId: m.id, stake: lobby.stake, type: lobby.type, invited: [...lobby.crew] }) : '';
+          go('matches');
+          toast(`Lobby ${code} created · waiting for your crew`);
           return;
         }
         render(body);
@@ -381,6 +392,9 @@
     balance: () => state.balance,
     spend(n) { if (state.balance < n) return false; state.balance -= n; save(); renderBalance(); return true; },
     topUp: () => openTopUp(),
+    match: (id) => MATCHES[id],
+    whenLabel: (m) => upcomingLabel(m.offset, m.time),
+    kickoff(m) { const d = new Date(); d.setDate(d.getDate() + m.offset); const [h, mi] = m.time.split(':'); d.setHours(+h, +mi, 0, 0); return d; },
   };
 
   paintIcons();

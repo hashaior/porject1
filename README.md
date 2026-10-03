@@ -22,7 +22,7 @@ The bottom bar is the same on every screen:
 | --- | --- |
 | Home | Home with Sharko the guide, tips carousel, Play Now |
 | Wallet | Market: daily deal, hats/eyes/extras that go straight into the Wardrobe, coin chests |
-| Swords | Matches with search, filters and Create Lobby |
+| Swords | Matches with search, filters and Create Lobby. After you create a lobby, this tab becomes the lobby waiting room (crew seats, total pot, scoreboard, chat) until you leave |
 | Grid | Results: final scores with expandable match details, league and day filters |
 | Profile | Profile with avatar picker, Add Friends, friends list with each friend's stats, and Wardrobe |
 
@@ -45,6 +45,7 @@ What works in the demo:
 - `js/app.js` – the app logic
 - `js/market.js`, `css/market.css` – the Market
 - `js/wheel.js`, `css/wheel.css` – the Lucky Wheel
+- `js/lobby.js`, `css/lobby.css` – the lobby waiting room
 - `js/auth.js`, `css/auth.css` – loading, sign-in and create-account screens
 - `js/results.js`, `js/profile.js` – the Results and Profile screens, from the two design files
 - `assets/fonts/` – Lilita One, Manrope and Bungee, the fonts used in the designs
