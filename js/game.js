@@ -217,8 +217,9 @@
   }
   const minuteLabel = (t) => clockLabel(t).replace('HT', "45'");
   function onQuestion(q) {
-    try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) { /* not supported */ }
-    if (!onLiveScreen()) {
+    const on = (k) => !window.PS || !PS.setting || PS.setting(k);
+    try { if (on('vibration') && navigator.vibrate) navigator.vibrate([60, 40, 60]); } catch (e) { /* not supported */ }
+    if (!onLiveScreen() && on('alerts')) {
       push({ icon: '⚡', title: `LIVE QUESTION · ${minuteLabel(q.open)}`, text: fill(q.text), cta: 'ANSWER', q: q.id, until: q.close });
     }
     const crew = players().filter((p) => !p.you);

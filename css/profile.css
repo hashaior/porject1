@@ -209,3 +209,63 @@
 #screen-profile .ach-claimed{color:#8BEB6E;background:rgba(74,222,128,.08);border:1.5px solid rgba(139,235,110,.4);font-size:11px}
 #screen-profile .ach-reward{color:#F6D58A;background:rgba(6,19,26,.6);border:1px solid rgba(255,255,255,.1);font-size:16px}
 #screen-profile .ach-reward span{font:800 8.5px Manrope;letter-spacing:.08em;color:var(--dim)}
+
+/* Edit profile */
+#screen-profile .ed-av{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:16px;cursor:pointer}
+#screen-profile .ed-av .ring{position:relative;width:96px;height:96px;padding:6px}
+#screen-profile .ed-av span{font:12px 'Lilita One';letter-spacing:.05em;color:#F6D58A}
+#screen-profile .ed-card{margin:14px 16px 0;padding:6px 14px 14px}
+#screen-profile .ef{margin-top:12px;scroll-margin:120px}
+#screen-profile .ef.flash .ef-in,#screen-profile .ef.flash .ed-chips,#screen-profile .ef.flash .ed-teams{animation:ef-flash 1.2s ease-out}
+@keyframes ef-flash{30%{box-shadow:0 0 0 3px rgba(242,184,75,.7)}}
+#screen-profile .ef label{display:block;font:800 10.5px Manrope;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:0 4px 6px}
+#screen-profile .ef-in{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;border-radius:15px;background:rgba(6,19,26,.82);border:1.5px solid rgba(255,255,255,.12)}
+#screen-profile .ef-in:focus-within{border-color:rgba(246,213,138,.7)}
+#screen-profile .ef-in.bad{border-color:rgba(229,72,77,.8)}
+#screen-profile .ef-in input{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font:600 15px Manrope;color-scheme:dark}
+#screen-profile .ef-err{font-size:11.5px;font-weight:700;color:#FF8A8E;margin:4px 4px 0}
+#screen-profile .ef-err:empty{display:none}
+#screen-profile .ed-chips{display:flex;flex-wrap:wrap;gap:7px;border-radius:12px}
+#screen-profile .ed-chip{height:32px;padding:0 12px;border-radius:999px;font:13px 'Lilita One';letter-spacing:.03em;color:#E6EEF1;background:rgba(6,19,26,.7);border:1.5px solid rgba(255,255,255,.12);cursor:pointer}
+#screen-profile .ed-chip.on{color:var(--goldTxt);border:2px solid var(--ink);background:linear-gradient(180deg,#FCE39A,#DB952F);box-shadow:inset 0 -3px 0 rgba(142,86,12,.6)}
+#screen-profile .ed-teams{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;border-radius:12px}
+#screen-profile .ed-team{display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;border-radius:12px;background:rgba(6,19,26,.7);border:1.5px solid rgba(255,255,255,.1);font-size:12.5px;font-weight:800;color:#E6EEF1;cursor:pointer;text-align:left;min-width:0}
+#screen-profile .ed-team span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-profile .ed-team i{width:26px;height:26px;flex:none;border-radius:50%;display:grid;place-items:center;font:8.5px 'Lilita One';font-style:normal;border:2px solid rgba(255,255,255,.85)}
+#screen-profile .ed-team.on{border:2px solid var(--ink);background:linear-gradient(180deg,#FCE39A,#DB952F);color:var(--goldTxt)}
+/* Settings */
+#screen-profile .srow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}
+#screen-profile .srow:last-child{border-bottom:0}
+#screen-profile .srow .di{width:34px;height:34px;border-radius:11px;background:rgba(6,19,26,.7);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+#screen-profile .srow .grow{flex:1;min-width:0}
+#screen-profile .srow b{display:block;font-size:14px;font-weight:800;color:#fff}
+#screen-profile .srow small{font-size:11px;font-weight:600;color:var(--dim)}
+#screen-profile .srow.danger b{color:#FF8A8E}
+#screen-profile .srow .chev{color:#4F6873;font-weight:800}
+#screen-profile .sw{appearance:none;-webkit-appearance:none;width:46px;height:28px;flex:none;border-radius:14px;background:rgba(6,19,26,.9);border:2px solid var(--ink);position:relative;cursor:pointer;transition:background .2s}
+#screen-profile .sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#7F95A0;transition:transform .2s,background .2s}
+#screen-profile .sw:checked{background:linear-gradient(180deg,#8BEB6E,#2FA84A)}
+#screen-profile .sw:checked::after{transform:translateX(18px);background:#fff}
+#screen-profile .details.lang{padding:12px 14px}
+#screen-profile .s-note{margin-top:8px;font-size:11.5px;font-weight:700;color:#8FF0DA}
+#screen-profile .s-ver{text-align:center;margin-top:18px;font-size:11px;font-weight:700;color:var(--dim)}
+/* Add-friends tools */
+#screen-profile .sh-scroll{max-height:470px;overflow-y:auto;scrollbar-width:none;margin:0 -4px;padding:0 4px}
+#screen-profile .sh-scroll::-webkit-scrollbar{display:none}
+#screen-profile .person .h{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-profile .sh-back{display:inline-block;margin:0 0 8px;font:12px 'Lilita One';letter-spacing:.04em;color:#F6D58A;cursor:pointer}
+#screen-profile .sh-p{font-size:12.5px;font-weight:600;color:var(--mut);line-height:1.45;margin:2px 2px 12px}
+#screen-profile .share-box{padding:14px;border-radius:16px;border:2px dashed rgba(246,213,138,.5);background:rgba(242,184,75,.08);font:15px 'Lilita One';letter-spacing:.03em;color:#F6D58A;text-align:center;word-break:break-all;user-select:all}
+#screen-profile .share-msg{margin-top:16px;padding:12px;border-radius:16px;background:rgba(6,19,26,.6);border:1px solid rgba(255,255,255,.1)}
+#screen-profile .share-msg small{font:800 9.5px Manrope;letter-spacing:.1em;color:var(--dim)}
+#screen-profile .share-msg p{margin:6px 0 10px;font-size:13px;font-weight:600;color:#E6EEF1;line-height:1.4;user-select:all}
+#screen-profile .share-msg .copy{margin:0;width:100%;justify-content:center}
+#screen-profile .person .pa.ini{display:grid;place-items:center;background:linear-gradient(180deg,#5E7680,#2F4650);font:15px 'Lilita One';color:#fff}
+#screen-profile .addbtn.inv{background:linear-gradient(180deg,#C9A2FF,#6A3FB5);box-shadow:inset 0 -3px 0 rgba(40,10,90,.6)}
+#screen-profile .qr-card{margin:4px auto 12px;width:250px;padding:14px;border-radius:24px;background:#fff;border:3px solid var(--ink);box-shadow:0 0 0 5px #F2C063,0 0 0 8px var(--ink),0 12px 30px rgba(0,0,0,.5)}
+#screen-profile .qr svg{display:block;width:100%;height:auto}
+#screen-profile .qr-who{display:flex;align-items:center;gap:10px;margin-top:8px;color:#1B1230}
+#screen-profile .qr-av{width:38px;height:38px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px var(--ink);flex:none}
+#screen-profile .qr-who b{display:block;font:16px 'Lilita One';letter-spacing:.02em}
+#screen-profile .qr-who small{font-size:11px;font-weight:700;color:#4F6873}
+#screen-profile .person .addbtn{flex:none}

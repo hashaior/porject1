@@ -65,6 +65,9 @@
   /* icons */
   const I = (p, c = '#9FB3BD', s = 24, w = 2) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
   const P = {
+    bell: '<path d="M6 8.5a6 6 0 0 1 12 0c0 6.5 2.5 8.5 2.5 8.5h-17S6 15 6 8.5"/><path d="M10.3 20.5a2 2 0 0 0 3.4 0"/>',
+    volume: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     wallet: '<path d="M19 7V5a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4"/><path d="M3 6v12a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-3"/><path d="M17 12h4v4h-4a2 2 0 0 1 0-4z"/>',
     gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
     pencil: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4z"/>',
@@ -114,12 +117,23 @@
 
   /* ============ STATE (saved in this browser) ============ */
   const KEY = 'sharko.profile.v1';
-  const STATE = { animal: 'shark', hat: 'pirate', eyes: null, extra: null, owned: ['pirate', 'wizard', 'beanie', 'goggles', 'shades', 'monocle'] };
+  const STATE = {
+    animal: 'shark', hat: 'pirate', eyes: null, extra: null, owned: ['pirate', 'wizard', 'beanie', 'goggles', 'shades', 'monocle'],
+    details: { email: 'or.captain@gmail.com', phone: '+972 50-123-4567', country: 'Israel', team: 'MTA', birthday: '1998-03-14' },
+    settings: { sound: true, alerts: true, reminders: true, vibration: true, online: true, lang: 'en' },
+  };
   try { Object.assign(STATE, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { /* use defaults */ }
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(STATE)); } catch (e) { /* ignore */ } };
   const toast = (m) => window.APP && APP.toast(m);
   const userName = () => (window.APP ? APP.userName() : 'CaptainOr');
   const handle = () => userName().toLowerCase().replace(/[^a-z0-9]+/g, '_');
+  const FRIEND_CODE = 'OR-4827';
+  const inviteLink = () => `https://sharko.app/join/${FRIEND_CODE}`;
+  const COUNTRIES = ['Israel', 'England', 'Spain', 'Italy', 'Germany', 'France', 'USA', 'Other'];
+  const FAV_TEAM_KEYS = ['MTA', 'HBS', 'MHA', 'HTA', 'BEI', 'LIV', 'MCI', 'ARS', 'RMA', 'BAR', 'INT', 'FCB'];
+  const teamLabel = (k) => (typeof TEAMS !== 'undefined' && TEAMS[k] ? TEAMS[k][0] : k);
+  const fmtBirthday = (iso) => { if (!iso) return 'Not set'; const d = new Date(`${iso}T12:00:00`); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); };
+  const escA = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /* ============ FRIENDS (demo data) ============ */
   const FRIEND_NAMES = [['octopus', 'Maya', 1], ['crab', 'Tomer', 1], ['turtle', 'Noa', 0], ['puffer', 'Eden', 1], ['shark', 'Daniel', 0], ['octopus', 'Lior', 0],
@@ -148,7 +162,7 @@
     const ach = STATS.achievements(achCtx());
     const friends = FRIENDS.slice(0, 6).map((f) => [f.animal, f.name, f.online ? 1 : 0]);
     return `${rays()}<div class="scroll">${status()}
-  <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.toast('Settings are not part of this demo')">${I(P.gear, '#F6D58A', 22)}<span class="dot"></span></div></div>
+  <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.openSettings()" aria-label="Settings">${I(P.gear, '#F6D58A', 22)}<span class="dot"></span></div></div>
   <div class="hero"><div class="stage"></div>
     <div class="avatar-wrap" onclick="PS.openPicker()">
       <div class="ring"><div class="inner">${animal(STATE.animal)}</div></div>
@@ -157,14 +171,14 @@
       <div class="btn-gold swap">${I(P.swap, '#2B1A04', 20, 2.6)}</div>
       <div class="tap-hint"><svg width="24" height="20" viewBox="0 0 24 20"><path d="M22 2C14 2 8 8 4 16m0 0 6-1M4 16l-1-6" stroke="#F6D58A" stroke-width="2" fill="none" stroke-linecap="round"/></svg>TAP TO<br>CHANGE!</div>
     </div>
-    <div class="name"><h1>${userName()}</h1><div class="pencil" onclick="PS.toast('Name editing is not part of this demo')">${I(P.pencil, '#F6D58A', 16, 2.4)}</div></div>
-    <div class="handle">@${handle()} <span style="opacity:.4">•</span> <span class="flag">${israelFlag()} Israel</span> <span style="opacity:.4">•</span> ${a.kind} crew</div>
+    <div class="name"><h1>${userName()}</h1><div class="pencil" onclick="PS.openEdit('name')" aria-label="Edit name">${I(P.pencil, '#F6D58A', 16, 2.4)}</div></div>
+    <div class="handle">@${handle()} <span style="opacity:.4">•</span> <span class="flag">${STATE.details.country === 'Israel' ? israelFlag() : '🌍'} ${escA(STATE.details.country)}</span> <span style="opacity:.4">•</span> ${a.kind} crew</div>
   </div>
 
 
   <div class="actions">
     <div class="act gold" onclick="PS.openWardrobe()">${I(P.hanger, '#2B1A04', 24, 2.4)}WARDROBE<span class="badge">${STATE.owned.length}</span></div>
-    <div class="act teal" onclick="PS.toast('Profile editing is not part of this demo')">${I(P.pencil, '#fff', 22, 2.6)}EDIT PROFILE</div>
+    <div class="act teal" onclick="PS.openEdit()">${I(P.pencil, '#fff', 22, 2.6)}EDIT PROFILE</div>
     <div class="act green" onclick="PS.openAdd()">${I(P.userplus, '#fff', 22, 2.6)}ADD FRIEND</div>
   </div>
 
@@ -179,9 +193,9 @@
     ${friends.map(([k, n, on], i) => `<div class="fr" onclick="PS.openFriend(${i})"><div class="av"><div class="clip">${animal(k)}</div>${on ? '<span class="on"></span>' : ''}</div><span>${n}</span></div>`).join('')}
   </div>
 
-  <div class="sec"><h2>MY DETAILS</h2><span class="link" style="display:flex;gap:4px;align-items:center">${I(P.pencil, '#F6D58A', 13, 2.6)} Edit</span></div>
+  <div class="sec"><h2>MY DETAILS</h2><span class="link" style="display:flex;gap:4px;align-items:center" onclick="PS.openEdit()">${I(P.pencil, '#F6D58A', 13, 2.6)} Edit</span></div>
   <div class="card details">
-    ${[['at', 'Username', '@' + handle()], ['mail', 'Email', 'or.captain@gmail.com'], ['phone', 'Phone', '+972 50-123-4567'], ['globe', 'Country', 'Israel'], ['shirt', 'Favorite team', 'Maccabi Tel Aviv'], ['cake', 'Birthday', '14 March 1998']].map(([i, k, v]) => `<div class="drow"><div class="di">${I(P[i], '#F6D58A', 17, 2.2)}</div><div class="grow"><div class="k">${k}</div><div class="v">${v}</div></div><span class="chev">›</span></div>`).join('')}
+    ${[['at', 'Username', '@' + handle(), 'name'], ['mail', 'Email', STATE.details.email, 'email'], ['phone', 'Phone', STATE.details.phone || 'Not set', 'phone'], ['globe', 'Country', STATE.details.country, 'country'], ['shirt', 'Favorite team', teamLabel(STATE.details.team), 'team'], ['cake', 'Birthday', fmtBirthday(STATE.details.birthday), 'birthday']].map(([i, k, v, f]) => `<div class="drow" onclick="PS.openEdit('${f}')"><div class="di">${I(P[i], '#F6D58A', 17, 2.2)}</div><div class="grow"><div class="k">${k}</div><div class="v">${escA(v)}</div></div><span class="chev">›</span></div>`).join('')}
   </div>
 
   <div class="sec"><h2>ACHIEVEMENTS <span class="chip">${ach.filter((x) => x.done).length}/${ach.length}</span></h2><span class="link" onclick="PS.openAchievements()">See all ›</span></div>
@@ -210,19 +224,23 @@
 
   /* ============ ADD FRIEND ============ */
   const sentReq = new Set(['Noa Mizrahi']);
+  const SUGGESTED = [['crab', 'Tomer Levi', '@tomer_l', '4 mutual friends'], ['puffer', 'Eden Cohen', '@edenc', 'Also a Maccabi fan'], ['turtle', 'Noa Mizrahi', '@noa.m', '2 mutual friends'], ['octopus', 'Yael Ben-David', '@yael_bd', 'In your contacts'],
+    ['shark', 'Amir Katz', '@amirk', '3 mutual friends'], ['crab', 'Lihi Peretz', '@lihi.p', 'Plays Ligat Ha\'Al lobbies'], ['puffer', 'Omri Shalev', '@omri_s', '1 mutual friend'], ['octopus', 'Shani Azulay', '@shani_a', 'Also a Liverpool fan'],
+    ['turtle', 'Guy Friedman', '@guyf', '5 mutual friends'], ['shark', 'Maor Biton', '@maor.b', 'Top 10 this week'], ['crab', 'Rina Golan', '@rina_g', 'In your contacts'], ['puffer', 'Erez Dahan', '@erezd', '2 mutual friends']];
+  const personRow = ([k, n, h, m]) => { const sent = sentReq.has(n); return `<div class="person" data-q="${escA((n + ' ' + h).toLowerCase())}"><div class="pa">${animal(k)}</div><div class="grow"><div class="n">${escA(n)}</div><div class="h">${escA(h)} · ${escA(m)}</div></div><div class="addbtn ${sent ? 'sent' : ''}" onclick="PS.sendReq(this,'${escA(n)}')">${sent ? '✓ SENT' : `${I(P.userplus, '#fff', 15, 2.8)} ADD`}</div></div>`; };
   function addHTML() {
-    const ppl = [['crab', 'Tomer Levi', '@tomer_l', '4 mutual friends'], ['puffer', 'Eden Cohen', '@edenc', 'Also a Maccabi fan'], ['turtle', 'Noa Mizrahi', '@noa.m', '2 mutual friends'], ['octopus', 'Yael Ben-David', '@yael_bd', 'In your contacts']];
+    const ppl = SUGGESTED.slice(0, 4);
     return `<div class="dim" onclick="PS.closeSheet()"></div><div class="sheet tallsheet">
     <div class="plate">ADD FRIENDS</div>
     <div class="close" onclick="PS.closeSheet()">${I(P.x, '#fff', 16, 3.2)}</div>
     <div class="search" style="margin-top:14px">${I('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', '#A9BCC4', 20, 2.4)}<input id="friend-search" placeholder="Search by username or phone" oninput="PS.searchPeople(this.value)"></div>
     <div class="ways">
-      <div class="way purple" onclick="PS.toast('Invite link copied (demo)')">${I('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>', '#fff', 22, 2.6)}SHARE LINK</div>
-      <div class="act teal" style="height:78px" onclick="PS.toast('Contacts are not part of this demo')">${I('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>', '#fff', 22, 2.6)}CONTACTS</div>
-      <div class="act gold" style="height:78px" onclick="PS.toast('Your QR code: OR-4827')">${I('<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>', '#2B1A04', 22, 2.6)}QR CODE</div>
+      <div class="way purple" onclick="PS.openShare()">${I('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>', '#fff', 22, 2.6)}SHARE LINK</div>
+      <div class="act teal" style="height:78px" onclick="PS.openContacts()">${I('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>', '#fff', 22, 2.6)}CONTACTS</div>
+      <div class="act gold" style="height:78px" onclick="PS.openQR()">${I('<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>', '#2B1A04', 22, 2.6)}QR CODE</div>
     </div>
     <div class="code"><div><div class="k">Your friend code</div><div class="v">OR-4827</div></div><div class="copy btn-gold" onclick="PS.copyCode()">${I('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>', '#2B1A04', 16, 2.6)}COPY</div></div>
-    <div class="subh"><b>SUGGESTED FOR YOU</b><span class="link">See all ›</span></div>
+    <div class="subh"><b>SUGGESTED FOR YOU</b><span class="link" onclick="PS.openSuggested()">See all ›</span></div>
     <div class="sug">${ppl.map(([k, n, h, m]) => { const sent = sentReq.has(n); return `<div class="person" data-q="${(n + ' ' + h).toLowerCase()}"><div class="pa">${animal(k)}</div><div class="grow"><div class="n">${n}</div><div class="h">${h} · ${m}</div></div><div class="addbtn ${sent ? 'sent' : ''}" onclick="PS.sendReq(this,'${n}')">${sent ? '✓ SENT' : `${I(P.userplus, '#fff', 15, 2.8)} ADD`}</div></div>`; }).join('')}</div>
   </div>`;
   }
@@ -324,13 +342,115 @@
     STATS.newlyDone(achCtx()).forEach((x, i) => setTimeout(() => toast(`🏆 Achievement unlocked: ${x.name}! Claim it in your Profile`), 600 + i * 2800));
   };
 
+  /* ============ EDIT PROFILE ============ */
+  let editDraft = null; let editFocus = null; let editErrors = {};
+  function editHTML() {
+    const d = editDraft;
+    const field = (id, label, icon, input) => `<div class="ef" id="ef-${id}"><label for="ed-${id}">${label}</label><div class="ef-in ${editErrors[id] ? 'bad' : ''}">${I(P[icon], '#A9BCC4', 18, 2.2)}${input}</div><p class="ef-err">${editErrors[id] || ''}</p></div>`;
+    return `${rays()}<div class="scroll">${status()}
+  <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.openProfile()" aria-label="Back">${I('<path d="m15 18-6-6 6-6"/>', '#F6D58A', 24, 2.6)}</div></div>
+  <div class="wtitle"><div class="woodsign"><b>EDIT PROFILE</b></div></div>
+  <div class="ed-av" onclick="PS.openPicker()"><div class="ring"><div class="inner">${animal(STATE.animal)}</div></div><span>Change avatar</span></div>
+  <div class="card ed-card">
+    ${field('name', 'Captain name', 'at', `<input id="ed-name" maxlength="16" value="${escA(d.name)}" autocomplete="nickname">`)}
+    ${field('email', 'Email', 'mail', `<input id="ed-email" type="email" value="${escA(d.email)}" autocomplete="email">`)}
+    ${field('phone', 'Phone', 'phone', `<input id="ed-phone" type="tel" value="${escA(d.phone)}" autocomplete="tel" placeholder="+972 50-000-0000">`)}
+    ${field('birthday', 'Birthday', 'cake', `<input id="ed-birthday" type="date" value="${escA(d.birthday)}">`)}
+    <div class="ef" id="ef-country"><label>Country</label><div class="ed-chips">${COUNTRIES.map((c) => `<button type="button" class="ed-chip ${d.country === c ? 'on' : ''}" onclick="PS.editSet('country','${c}')">${c}</button>`).join('')}</div></div>
+    <div class="ef" id="ef-team"><label>Favorite team</label><div class="ed-teams">${FAV_TEAM_KEYS.map((k) => `<button type="button" class="ed-team ${d.team === k ? 'on' : ''}" onclick="PS.editSet('team','${k}')"><i style="background:${TEAMS[k][1]};color:${TEAMS[k][2]}">${k}</i><span>${escA(TEAMS[k][0])}</span></button>`).join('')}</div></div>
+  </div>
+  <div class="bigbtn" style="margin:18px 16px 0" onclick="PS.saveEdit()">${I(P.check, '#2B1A04', 22, 3.2)} SAVE CHANGES</div>
+  </div>`;
+  }
+  const readEditInputs = () => {
+    ['name', 'email', 'phone', 'birthday'].forEach((k) => { const el = document.getElementById(`ed-${k}`); if (el) editDraft[k] = el.value.trim(); });
+  };
+
+  /* ============ SETTINGS ============ */
+  function settingsHTML() {
+    const st = STATE.settings;
+    const tog = (k, label, sub, icon) => `<label class="srow"><span class="di">${I(P[icon], '#F6D58A', 17, 2.2)}</span><span class="grow"><b>${label}</b><small>${sub}</small></span><input type="checkbox" class="sw" ${st[k] ? 'checked' : ''} onchange="PS.setSetting('${k}', this.checked)"></label>`;
+    const link = (label, sub, icon, fn, cls = '') => `<div class="srow ${cls}" onclick="${fn}"><span class="di">${I(P[icon], cls ? '#FF8A8E' : '#F6D58A', 17, 2.2)}</span><span class="grow"><b>${label}</b>${sub ? `<small>${sub}</small>` : ''}</span><span class="chev">›</span></div>`;
+    return `${rays()}<div class="scroll">${status()}
+  <div class="topbar">${balance()}<div class="iconbtn" onclick="PS.openProfile()" aria-label="Back">${I('<path d="m15 18-6-6 6-6"/>', '#F6D58A', 24, 2.6)}</div></div>
+  <div class="wtitle"><div class="woodsign"><b>SETTINGS</b></div></div>
+  <div class="sec"><h2>GAME</h2></div>
+  <div class="card details">
+    ${tog('alerts', 'Live question alerts', 'Banner when a question opens during your match', 'bell')}
+    ${tog('vibration', 'Vibration', 'Buzz on new questions and answers', 'phone')}
+    ${tog('sound', 'Sound effects', 'Goals, coins and the Lucky Wheel', 'volume')}
+    ${tog('reminders', 'Match reminders', 'Before your lobby kicks off', 'clock')}
+  </div>
+  <div class="sec"><h2>LANGUAGE</h2></div>
+  <div class="card details lang">
+    <div class="ed-chips">${[['en', 'English'], ['he', 'עברית']].map(([k, l]) => `<button type="button" class="ed-chip ${st.lang === k ? 'on' : ''}" onclick="PS.setSetting('lang','${k}')">${l}</button>`).join('')}</div>
+    ${st.lang === 'he' ? '<p class="s-note">The Hebrew version is on the way. For now the app stays in English.</p>' : ''}
+  </div>
+  <div class="sec"><h2>ACCOUNT</h2></div>
+  <div class="card details">
+    ${link('Edit profile', 'Name, email, phone, team, birthday', 'pencil', 'PS.openEdit()')}
+    ${tog('online', 'Show me as online', 'Friends see when you are around', 'globe')}
+    ${link('Log out', '', 'logout', 'AUTH.logout()', 'danger')}
+  </div>
+  <p class="s-ver">Sharko Match Party · v1.0 demo</p>
+  </div>`;
+  }
+
+  /* ============ ADD FRIENDS: share, contacts, QR, suggested ============ */
+  const plateSheet = (plate, body, cls = '') => `<div class="dim" onclick="PS.closeSheet()"></div><div class="sheet ${cls}"><div class="plate">${plate}</div><div class="close" onclick="PS.closeSheet()">${I(P.x, '#fff', 16, 3.2)}</div>${body}</div>`;
+  const back = `<div class="sh-back" onclick="PS.openAdd()">‹ Back to Add friends</div>`;
+  function copyText(text, okMsg) {
+    const fallback = () => {
+      const el = document.getElementById('share-link'); if (el) { const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+      toast('Select the link and copy it');
+    };
+    try { navigator.clipboard.writeText(text).then(() => toast(okMsg), fallback); } catch (e) { fallback(); }
+  }
+  function shareHTML() {
+    return plateSheet('SHARE LINK', `${back}
+      <p class="sh-p">Send this link to a friend. When they open it, you become friends on Sharko.</p>
+      <div class="share-box"><span id="share-link">${inviteLink()}</span></div>
+      <div class="bigbtn" onclick="PS.copyLink()">${I('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>', '#2B1A04', 20, 2.6)} COPY LINK</div>
+      <div class="share-msg"><small>OR COPY A READY MESSAGE</small><p id="share-text">Join my crew on Sharko! 🦈 Let's play the next big match together: ${inviteLink()}</p><button class="copy btn-gold" onclick="PS.copyMessage()">COPY MESSAGE</button></div>`, 'tallsheet');
+  }
+  // Demo address book. A real phone app would ask for permission and read your contacts.
+  const CONTACTS = [['Avi Mizrahi', '+972 52-311-4410', 'crab'], ['Dana Levi', '+972 54-220-9183', 'octopus'], ['Itay Cohen', '+972 50-781-2205', null], ['Michal Ben-Ami', '+972 58-640-1172', 'turtle'], ['Ron Shapira', '+972 53-907-3388', null], ['Tal Ohana', '+972 52-115-6609', 'puffer'], ['Yossi Azoulay', '+972 54-488-0027', null]];
+  const invitedContacts = new Set();
+  function contactsHTML() {
+    const onApp = CONTACTS.filter((c) => c[2]); const notOn = CONTACTS.filter((c) => !c[2]);
+    return plateSheet('CONTACTS', `${back}
+      <p class="sh-p">Demo contacts. On a phone, Sharko asks for permission and shows who from your contacts already plays.</p>
+      <div class="sh-scroll"><div class="subh"><b>ON SHARKO · ${onApp.length}</b></div>
+      <div class="sug">${onApp.map(([n, ph, a]) => personRow([a, n, ph, 'In your contacts'])).join('')}</div>
+      <div class="subh"><b>INVITE TO SHARKO · ${notOn.length}</b></div>
+      <div class="sug">${notOn.map(([n, ph]) => `<div class="person"><div class="pa ini">${n.split(' ').map((x) => x[0]).join('')}</div><div class="grow"><div class="n">${escA(n)}</div><div class="h">${escA(ph)}</div></div><div class="addbtn ${invitedContacts.has(n) ? 'sent' : 'inv'}" onclick="PS.inviteContact(this,'${escA(n)}')">${invitedContacts.has(n) ? '✓ INVITED' : 'INVITE'}</div></div>`).join('')}</div></div>`, 'tallsheet');
+  }
+  function qrHTML() {
+    return plateSheet('MY QR CODE', `${back}
+      <div class="qr-card"><div class="qr" id="qr-box"></div><div class="qr-who"><span class="qr-av">${animal(STATE.animal)}</span><div><b>${escA(userName())}</b><small>@${escA(handle())}</small></div></div></div>
+      <p class="sh-p" style="text-align:center">Friends scan this code with their phone camera to add you.</p>
+      <div class="code" style="margin-top:6px"><div><div class="k">Your friend code</div><div class="v">${FRIEND_CODE}</div></div><div class="copy btn-gold" onclick="PS.copyCode()">COPY</div></div>`);
+  }
+  function drawQR() {
+    const box = document.getElementById('qr-box'); if (!box) return;
+    if (typeof qrcode !== 'function') { box.innerHTML = `<p class="sh-p">${FRIEND_CODE}</p>`; return; }
+    const qr = qrcode(0, 'M'); qr.addData(inviteLink()); qr.make();
+    box.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+  }
+  let sugQuery = '';
+  function suggestedHTML() {
+    return plateSheet('SUGGESTED FRIENDS', `${back}
+      <div class="search" style="margin-top:4px">${I('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', '#A9BCC4', 20, 2.4)}<input id="sug-search" placeholder="Search suggestions" value="${escA(sugQuery)}" oninput="PS.filterSuggested(this.value)"></div>
+      <div class="sug sh-scroll" id="sug-list">${SUGGESTED.map(personRow).join('')}</div>`, 'tallsheet');
+  }
+
   /* ============ RENDER + INTERACTIONS ============ */
   const screen = () => document.getElementById('screen-profile');
   let view = 'profile';
   const render = (keepScroll) => {
     const sc = screen().querySelector('.scroll');
     const top = keepScroll && sc ? sc.scrollTop : 0;
-    screen().innerHTML = view === 'wardrobe' ? wardrobeHTML() : view === 'friends' ? friendsHTML() : view === 'achievements' ? achievementsHTML() : profileHTML();
+    screen().innerHTML = view === 'wardrobe' ? wardrobeHTML() : view === 'friends' ? friendsHTML() : view === 'achievements' ? achievementsHTML() : view === 'edit' ? editHTML() : view === 'settings' ? settingsHTML() : profileHTML();
     screen().querySelector('.scroll').scrollTop = top;
   };
   const openSheet = (html) => { PS.closeSheet(); screen().insertAdjacentHTML('beforeend', html); };
@@ -372,6 +492,40 @@
     },
     openPicker() { openSheet(pickerHTML(STATE.animal)); },
     openAdd() { openSheet(addHTML()); },
+    openShare() { openSheet(shareHTML()); },
+    copyLink() { copyText(inviteLink(), 'Invite link copied'); },
+    copyMessage() { copyText(document.getElementById('share-text').textContent, 'Invite message copied'); },
+    openContacts() { openSheet(contactsHTML()); },
+    inviteContact(el, n) { invitedContacts.add(n); el.classList.remove('inv'); el.classList.add('sent'); el.textContent = '✓ INVITED'; copyText(`Join my crew on Sharko! 🦈 ${inviteLink()}`, `Invite for ${n} copied. Paste it in a message.`); },
+    openQR() { openSheet(qrHTML()); drawQR(); },
+    openSuggested() { sugQuery = ''; openSheet(suggestedHTML()); },
+    filterSuggested(q) {
+      sugQuery = q; const v = q.trim().toLowerCase();
+      document.querySelectorAll('#sug-list .person').forEach((el) => { el.style.display = !v || el.dataset.q.includes(v) ? '' : 'none'; });
+    },
+    openEdit(focus) {
+      editDraft = { name: userName(), ...STATE.details }; editFocus = focus || null; editErrors = {};
+      view = 'edit'; render();
+      if (editFocus) setTimeout(() => { const el = document.getElementById(`ef-${editFocus}`); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('flash'); const inp = el.querySelector('input'); if (inp) inp.focus(); } }, 60);
+    },
+    editSet(k, v) { readEditInputs(); editDraft[k] = v; render(true); },
+    saveEdit() {
+      readEditInputs(); const d = editDraft; editErrors = {};
+      if (!d.name || d.name.length < 3) editErrors.name = 'Use at least 3 characters.';
+      else if (!/^[\w.\- ]+$/.test(d.name)) editErrors.name = 'Use letters, numbers, dots or dashes.';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) editErrors.email = 'Enter a valid email, like you@example.com.';
+      if (d.phone && !/^[+\d][\d\s-]{6,}$/.test(d.phone)) editErrors.phone = 'Use digits, spaces and dashes, like +972 50-123-4567.';
+      if (d.birthday && (Date.now() - new Date(d.birthday)) / (365.25 * 864e5) < 18) editErrors.birthday = 'You need to be 18 or older.';
+      if (Object.keys(editErrors).length) { render(true); return; }
+      STATE.details = { email: d.email, phone: d.phone, country: d.country, team: d.team, birthday: d.birthday };
+      save();
+      if (d.name !== userName()) APP.setUser(d.name);
+      view = 'profile'; render();
+      toast('Profile saved');
+    },
+    openSettings() { view = 'settings'; render(); },
+    setSetting(k, v) { STATE.settings[k] = v; save(); if (k === 'lang') render(true); toast(k === 'lang' ? (v === 'he' ? 'עברית נבחרה. The Hebrew version is coming soon.' : 'English selected') : 'Saved'); },
+    setting: (k) => STATE.settings[k] !== false,
     closeSheet() { screen().querySelectorAll('.dim,.sheet').forEach((n) => n.remove()); },
     choose(k) { openSheet(pickerHTML(k)); },
     saveAnimal(k) { STATE.animal = k; save(); PS.closeSheet(); render(true); toast(`${ANIMALS[k].name} the ${ANIMALS[k].kind} is your new avatar`); },
