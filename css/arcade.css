@@ -1,0 +1,174 @@
+/* =====================================================================
+   ARCADE LOOK (bright, colorful, "game" text) — loaded last, on top of the
+   original styles. To go back to the previous design, remove this file
+   and js/arcade.js from index.html (or return to commit d11bc12).
+   ===================================================================== */
+:root {
+  --ar-ink: #14204F;
+  --ar-bg: radial-gradient(130% 60% at 50% 0%, rgba(120, 200, 255, .45), rgba(120, 200, 255, 0) 60%),
+           linear-gradient(180deg, #2468F0 0%, #3445C9 38%, #3A2AA6 70%, #2A177A 100%);
+  --ar-blue: linear-gradient(180deg, #4FA6FF 0%, #2F74EC 55%, #2559D2 100%);
+  --ar-purple: linear-gradient(180deg, #A974FF 0%, #7A45E6 60%, #6534CC 100%);
+  --ar-sheet: linear-gradient(180deg, #3570EE 0%, #3048C8 55%, #2E2BA0 100%);
+  --ar-field: rgba(16, 26, 84, .55);
+  --ar-card-shadow: inset 0 2px 0 rgba(255, 255, 255, .45), inset 0 -4px 0 rgba(12, 28, 96, .35), 0 4px 0 rgba(10, 12, 50, .45);
+  /* white text with a thick dark outline, like Clash Royale / Board Kings */
+  --tx: 0 2px 0 #14204F, 2px 0 0 #14204F, -2px 0 0 #14204F, 0 -2px 0 #14204F, 1.5px 1.5px 0 #14204F, -1.5px 1.5px 0 #14204F, 1.5px -1.5px 0 #14204F, -1.5px -1.5px 0 #14204F, 0 4px 0 rgba(8, 10, 40, .5);
+  --tx-sm: 0 1.5px 0 #14204F, 1.5px 0 0 #14204F, -1.5px 0 0 #14204F, 0 -1.5px 0 #14204F, 1px 1px 0 #14204F, -1px 1px 0 #14204F, 1px -1px 0 #14204F, -1px -1px 0 #14204F, 0 3px 0 rgba(8, 10, 40, .45);
+}
+
+/* ---------- Backgrounds ---------- */
+.phone { background: var(--ar-bg); }
+.screen-matches, #screen-results, #screen-profile, #screen-market, #screen-lobby, #auth-login { background: var(--ar-bg) !important; }
+#screen-results, #screen-profile, #screen-market, #screen-lobby { --mut: #DCE8FF; --dim: #B4C8F4; --line: rgba(255, 255, 255, .18); --glass: rgba(16, 26, 84, .55); }
+.screen-matches { --muted: #DCE8FF; }
+.rays .glow { background: radial-gradient(closest-side, rgba(150, 220, 255, .45), rgba(150, 220, 255, 0)) !important; }
+.nav-fade { display: none; }
+
+/* ---------- Cards: vivid blue panels with an ink outline ---------- */
+.match-card,
+#screen-results .card,
+#screen-profile .card, #screen-profile .person,
+#screen-market .mk-it, #screen-market .chest, #screen-market .deal,
+#screen-lobby .card, #screen-lobby .ticket, #screen-lobby .bc,
+#auth-login .login-form,
+.app-sheet .sheet-match, .ds-pack {
+  background: var(--ar-blue) !important;
+  border: 2.5px solid var(--ar-ink) !important;
+  box-shadow: var(--ar-card-shadow) !important;
+}
+/* item tiles: purple, like the shop tiles in the videos */
+#screen-market .mk-it, #screen-profile .it, #screen-lobby .pk-opt, .ds-pack { background: var(--ar-purple) !important; border: 2.5px solid var(--ar-ink) !important; box-shadow: var(--ar-card-shadow) !important; }
+#screen-market .deal { background: radial-gradient(closest-side, rgba(255, 236, 170, .55), rgba(255, 236, 170, 0)) -20px 0 / 220px 200px no-repeat, var(--ar-purple) !important; border-color: #F6D58A !important; }
+#screen-profile .it.eq { border-color: #8BEB6E !important; }
+#screen-market .mk-it .art, #screen-profile .it .art { background: radial-gradient(closest-side, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0)) !important; }
+#screen-lobby .qcard { background: var(--ar-purple) !important; border: 3px solid #F6D58A !important; }
+#screen-lobby .qcard.idle, #screen-lobby .qcard.wait { border-color: var(--ar-ink) !important; }
+#screen-lobby .ft-me:not(.won), #screen-lobby .pk-intro, #screen-lobby .mine-sum div, #screen-lobby .ds-row > div { background: var(--ar-field) !important; border-color: rgba(255, 255, 255, .18) !important; }
+.match-card { border-radius: 20px; }
+.lobby-btn { box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), inset 0 -4px 0 rgba(150, 80, 10, .5), 0 3px 0 rgba(10, 12, 50, .45) !important; border: 2.5px solid var(--ar-ink) !important; }
+
+/* rows inside blue cards */
+#screen-profile .drow, #screen-profile .srow, #screen-lobby .tr, #screen-lobby .lr, #screen-lobby .ev, #screen-lobby .mr { border-bottom-color: rgba(255, 255, 255, .16) !important; }
+#screen-profile .drow .di, #screen-profile .srow .di, #screen-profile .stat .ic { box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .25); }
+#screen-profile .drow .di, #screen-profile .srow .di { background: var(--ar-field) !important; border-color: rgba(255, 255, 255, .2) !important; }
+#screen-profile .drow .k, #screen-profile .srow small, #screen-lobby .lr-name small, #screen-results .tm .nm { color: #DCE8FF !important; }
+
+/* glass pills and inputs: deep navy so they read on the bright background */
+.balance, .bell, #screen-results .bal, #screen-profile .bal, #screen-market .bal, #screen-lobby .bal,
+#screen-results .day, #screen-profile .iconbtn, #screen-market .iconbtn, #screen-lobby .iconbtn,
+.search-row .search, #screen-results .search, #screen-profile .search, #screen-profile .ef-in,
+#screen-profile .tabs, #screen-market .tabs, #screen-lobby .gm-tabs, #screen-lobby .chat-in input,
+.auth .input, #screen-results .st .ft {
+  background: rgba(14, 22, 78, .62) !important;
+  border-color: rgba(255, 255, 255, .2) !important;
+}
+#screen-results .day.on { background: linear-gradient(180deg, #FCE39A, #F0BC55 55%, #DB952F) !important; }
+#screen-lobby .iconbtn.exit { background: rgba(229, 72, 77, .25) !important; border-color: rgba(255, 138, 142, .6) !important; }
+
+/* sheets and pop-ups */
+.app-sheet, #screen-results .sheet, #screen-profile .sheet, #screen-market .sheet, #screen-lobby .sheet, .popover, .filter-panel, .wr-card {
+  background: var(--ar-sheet) !important;
+  border-color: #F6D58A !important;
+}
+.filter-panel::before, .popover::before { background: #3570EE !important; }
+.notif, #screen-results .lgi, #screen-lobby .inv, .ds-row > div { background: rgba(14, 22, 78, .45) !important; border-color: rgba(255, 255, 255, .16) !important; }
+.chip:not(.is-on), .ds-stake:not(.on), .ed-chip:not(.on), .ed-team:not(.on), .pk-opt:not(.on) { background-color: rgba(14, 22, 78, .55); }
+:is(.filter-panel, .app-sheet) .chip { background: rgba(14, 22, 78, .55); border-color: rgba(255, 255, 255, .2); }
+
+/* ---------- Game text: white, thick dark outline ---------- */
+.page-title, #screen-results .title h1 {
+  background: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important;
+  color: #fff !important; -webkit-text-fill-color: #fff !important; -webkit-text-stroke: 0 !important;
+  filter: none !important; text-shadow: var(--tx) !important; letter-spacing: .04em;
+}
+.page-title { font-size: 36px; }
+#screen-results .title h1 { font-family: 'Lilita One', sans-serif !important; font-size: 34px !important; }
+.page-sub, #screen-results .title p { color: #fff !important; text-shadow: 0 1px 2px rgba(8, 10, 40, .6); }
+.section-label, .sec h2, #screen-results .ghead b, .ds-h, .np-head h3, .fp-head h3, #screen-profile .subh b, .auth .su-sec, .lt {
+  color: #fff !important; text-shadow: var(--tx-sm) !important;
+}
+.fp-head h3 { font-size: 21px; }
+.balance-text b, .bal b, .stat b, .pot-num, .digits, .lr-pts, .mine-sum b, .ach-sum-row b, .chest b, .ds-pack b, .pd-rank, .ft-me b,
+#screen-profile .name h1, .profile-name, #screen-results .scores b.w, .team span:not(.crest), .bc-team b, .t-team b, .seat b, .lr-name b, .mk-it .nm, #screen-profile .it .nm, .q-text, .pk-top b {
+  text-shadow: var(--tx-sm) !important;
+}
+.digits { color: #FFE27A !important; }
+#screen-profile .name h1 { background: none !important; -webkit-background-clip: border-box !important; color: #fff !important; -webkit-text-fill-color: #fff !important; -webkit-text-stroke: 0 !important; filter: none !important; text-shadow: var(--tx) !important; }
+
+/* buttons: white text with an outline on gold / green / purple */
+.btn-gold.topup, .topup, .lobby-btn, .play-btn, .fp-apply, .bigbtn, .ds-big, .gm-big, .wm-spin, .wr-btn,
+#screen-profile .act.gold, #screen-market .deal-btn, #screen-market .mk-price:not(.owned), #screen-lobby .ko-btn b,
+.chip.is-on, .ds-stake.on, .pk-opt.on, .q-opt.on, .ed-chip.on, .ed-team.on, .segmented button.is-active, #screen-results .day.on b, #screen-results .day.on small, #screen-results .league-btn, .join-code {
+  color: #fff !important; text-shadow: var(--tx-sm) !important; -webkit-text-fill-color: #fff;
+}
+.btn-gold.topup, .topup { font-family: 'Lilita One', sans-serif !important; font-weight: 400 !important; letter-spacing: .03em; }
+.lobby-btn .plus { background: var(--ar-ink) !important; }
+#screen-results .league-btn .n { text-shadow: none; }
+.join-code { background: linear-gradient(180deg, #8BEB6E, #2FA84A) !important; border: 2px solid var(--ar-ink) !important; box-shadow: inset 0 -3px 0 #1C6B2C; }
+.when-chip { background: rgba(14, 22, 78, .55) !important; color: #FFE27A !important; border-color: rgba(255, 226, 122, .6) !important; }
+.count-pill, .ds-count { border: 1.5px solid var(--ar-ink); }
+.venue, .league { color: #fff !important; }
+.venue { color: #DCE8FF !important; }
+
+/* =====================================================================
+   NEW NAVIGATION BAR — illustrated icons, raised active tab, badges
+   ===================================================================== */
+/* crests keep their own colors (no outline on the letters) */
+.crest { text-shadow: none !important; }
+
+.tabbar.ar-nav {
+  top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; width: auto !important; height: 84px !important;
+  display: grid !important; grid-template-columns: repeat(5, 1fr) !important; align-items: end !important; padding: 0 6px 14px !important;
+  border-radius: 0 !important; border: 0 !important; border-top: 3px solid var(--ar-ink) !important;
+  background: linear-gradient(180deg, #4F9DFF 0%, #2E6FE6 45%, #2152C4 100%) !important;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .45), 0 -6px 18px rgba(10, 12, 50, .35) !important;
+  z-index: 12 !important;
+}
+.ar-nav button {
+  position: relative; justify-self: center; width: 100% !important; height: 60px !important; border-radius: 16px !important;
+  display: flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  background: none !important; box-shadow: none !important; transition: transform .18s cubic-bezier(.2, .9, .3, 1.4);
+}
+.ar-nav button + button::before { content: ""; position: absolute; left: -1px; top: 10px; bottom: 6px; width: 2px; border-radius: 1px; background: rgba(10, 30, 110, .35); }
+.ar-nav .ar-ic { display: block; width: 44px; height: 44px; filter: drop-shadow(0 3px 0 rgba(10, 12, 50, .45)); transition: transform .18s; }
+.ar-nav .ar-ic svg { width: 100%; height: 100%; display: block; }
+.ar-nav .ar-ic.avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 2.5px var(--ar-ink), 0 0 0 4.5px #fff; filter: none; }
+.ar-nav .ar-lbl { display: none; font: 13px 'Lilita One', sans-serif; letter-spacing: .05em; color: #fff; text-shadow: var(--tx-sm); margin-top: 2px; }
+.ar-nav button.is-active {
+  transform: translateY(-14px);
+  height: 82px !important; width: 74px !important;
+  background: linear-gradient(180deg, #FFE98F 0%, #FBC845 55%, #EE9B26 100%) !important;
+  border: 3px solid var(--ar-ink) !important; border-radius: 18px !important;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .7), inset 0 -5px 0 rgba(170, 90, 10, .5), 0 5px 0 rgba(10, 12, 50, .45), 0 0 20px rgba(255, 220, 110, .55) !important;
+}
+.ar-nav button.is-active::before, .ar-nav button.is-active + button::before { display: none; }
+.ar-nav button.is-active .ar-ic { transform: scale(1.18) translateY(-2px); }
+.ar-nav button.is-active .ar-lbl { display: block; }
+.ar-nav button:active .ar-ic { transform: scale(.9); }
+.ar-badge {
+  position: absolute; top: 2px; right: calc(50% - 30px); min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px;
+  display: grid; place-items: center; background: linear-gradient(180deg, #FF6B72, #D9303C); border: 2.5px solid var(--ar-ink);
+  font: 12px 'Lilita One', sans-serif; color: #fff; text-shadow: 0 1px 0 var(--ar-ink); z-index: 2;
+  animation: ar-pop .4s cubic-bezier(.2, .9, .3, 1.6);
+}
+.ar-badge[hidden] { display: none !important; }
+.ar-nav button.is-active .ar-badge { top: -8px; right: -8px; }
+.ar-badge.live { background: linear-gradient(180deg, #FF6B72, #D9303C); animation: ar-pulse 1.2s ease-in-out infinite; }
+@keyframes ar-pop { from { transform: scale(0); } }
+@keyframes ar-pulse { 50% { transform: scale(1.12); } }
+/* the old lobby dot is replaced by the badge */
+#tabbar [data-go="matches"].has-lobby::after, #tabbar [data-go="matches"].is-live::after { display: none !important; }
+/* "free spin" bubble over the Home tab, like "DAILY SPIN AVAILABLE" in the videos */
+.ar-tip {
+  position: absolute; z-index: 13; bottom: 90px; left: 8px; padding: 5px 10px 6px; border-radius: 10px;
+  background: #fff; border: 2.5px solid var(--ar-ink); box-shadow: 0 3px 0 rgba(10, 12, 50, .45);
+  font: 12px 'Lilita One', sans-serif; letter-spacing: .04em; color: var(--ar-ink); white-space: nowrap; cursor: pointer;
+  animation: ar-bob 1.6s ease-in-out infinite;
+}
+.ar-tip::after { content: ""; position: absolute; left: 26px; bottom: -9px; width: 12px; height: 12px; background: #fff; border-right: 2.5px solid var(--ar-ink); border-bottom: 2.5px solid var(--ar-ink); transform: rotate(45deg); }
+@keyframes ar-bob { 50% { transform: translateY(-4px); } }
+.ar-tip[hidden] { display: none !important; }
+/* keep content clear of the taller bar */
+.toast { bottom: 108px !important; }
+.home-indicator { z-index: 14 !important; background: rgba(255, 255, 255, .9) !important; }

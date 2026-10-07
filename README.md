@@ -47,6 +47,11 @@ What works in the demo:
 
 The match script (events, live questions, answers and points) is at the top of `js/game.js`.
 
+## Design versions
+
+- **Arcade look** (current): bright blue/purple colors, illustrated navigation bar with badges, white game-style text with an outline. It lives in `css/arcade.css` and `js/arcade.js`.
+- **Previous look**: commit `d11bc1229a6c78a445545035b9e615cd79acac54` ("Make every Profile button work"). To go back, remove the two arcade lines in `index.html`, or check out that commit.
+
 ## Files
 
 - `index.html` – the screens
