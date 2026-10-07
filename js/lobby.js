@@ -63,8 +63,9 @@
         players.push({ name, animal, stranger: true, status: 'invited', outcome: 'joined', due: t + rand(12000, 30000) });
       });
     }
+    if (window.GAME) GAME.reset();
     L = {
-      matchId, stake, type, created: t,
+      phase: 'waiting', matchId, stake, type, created: t,
       code: Math.random().toString(36).slice(2, 6).toUpperCase(),
       players,
       chat: [{ sys: true, text: 'Lobby created. Share the code with your crew!' }],
@@ -79,11 +80,12 @@
     const friends = PS.friends();
     const info = (n) => friends.find((f) => f.name === n) || { name: n, animal: 'shark', online: true };
     const t = now();
-    const players = def.players.map((n, i) => ({ name: n, animal: info(n).animal, level: info(n).level, host: i === 0, status: 'joined', at: t }));
+    const players = def.players.map((n, i) => ({ name: n, animal: info(n).animal, level: info(n).level, host: i === 0, status: 'joined', at: t, picksDue: t + rand(2500, 9000) }));
     players.push({ name: APP.userName(), you: true, status: 'joined', animal: PS.look().animal, at: t });
     def.joining.forEach((n) => players.push({ name: n, animal: info(n).animal, level: info(n).level, status: 'invited', outcome: 'joined', due: t + rand(4000, 12000) }));
+    if (window.GAME) GAME.reset();
     L = {
-      matchId: def.match, stake: def.stake, type: 'Private', created: t, code, joinedByCode: true,
+      phase: 'waiting', matchId: def.match, stake: def.stake, type: 'Private', created: t, code, joinedByCode: true,
       players: players.slice(0, SEATS),
       chat: [{ sys: true, text: `${def.host} created the lobby` }, { from: def.host, animal: info(def.host).animal, text: 'Welcome aboard, crew! 🦈' }, { sys: true, text: `You joined the lobby · +${fmt(def.stake)} to the pot` }],
     };
@@ -97,8 +99,14 @@
   /* ---------- simulation ---------- */
   let typing = null; // name of a friend who is typing
   function tick() {
-    if (!L) return;
+    if (!L || (L.phase && L.phase !== 'waiting')) return;
     let changed = false;
+    L.players.forEach((p) => {
+      if (!p.you && p.status === 'joined' && !p.picks && p.picksDue && now() >= p.picksDue) {
+        p.picks = GAME.randomPicks(); changed = true;
+        L.chat.push({ sys: true, text: `${p.name} locked in their picks` });
+      }
+    });
     L.players.forEach((p) => {
       if (p.status === 'invited' && now() >= p.due) {
         p.status = p.outcome;
@@ -106,6 +114,7 @@
         if (p.status === 'joined') {
           L.chat.push({ sys: true, text: `${p.name} joined the lobby · +${fmt(L.stake)} to the pot` });
           p.justJoined = true;
+          p.picksDue = now() + rand(4000, 14000);
           if (Math.random() < 0.75) setTimeout(() => say(p, pickOne(JOIN_LINES)), rand(900, 2200));
         } else {
           L.chat.push({ sys: true, text: `${p.name} can't make it this time` });
@@ -181,8 +190,8 @@
   function boardHTML() {
     const rows = joined();
     return `<div class="tr th"><span>#</span><span>PLAYER</span><span>PICKS</span><span>BONUS</span><span>PTS</span></div>
-      ${rows.map((p, i) => `<div class="tr ${p.you ? 'me' : ''}"><span class="rk r${i + 1}">${i + 1}</span><span class="pl"><span class="mini">${PS.animal(p.you ? PS.look().animal : p.animal)}</span>${esc(p.you ? `${p.name} (you)` : p.name)}</span><span>0</span><span>0</span><span class="pts">0</span></div>`).join('')}
-      <p class="board-note">${I(P.clock, '#7F95A0', 13, 2.4)} Everyone starts at 0. Points go live at kick-off.</p>`;
+      ${rows.map((p, i) => `<div class="tr ${p.you ? 'me' : ''}"><span class="rk r${i + 1}">${i + 1}</span><span class="pl"><span class="mini">${PS.animal(p.you ? PS.look().animal : p.animal)}</span>${esc(p.you ? `${p.name} (you)` : p.name)}</span><span class="pk-st ${p.picks ? 'ok' : ''}">${p.picks ? '✓' : '…'}</span><span>0</span><span class="pts">0</span></div>`).join('')}
+      <p class="board-note">${I(P.clock, '#7F95A0', 13, 2.4)} Everyone starts at 0. Picks and live questions score points once the match starts.</p>`;
   }
   function chatHTML() {
     const msgs = L.chat.slice(-40).map((m) => {
@@ -224,6 +233,9 @@
 
       <div class="pot" id="lb-pot">${potHTML()}</div>
 
+      <div class="sec"><h2>MATCH PICKS</h2><span class="sec-note">Up to ${GAME.MAX_PICKS} pts</span></div>
+      <div id="lb-picks">${GAME.picksCard()}</div>
+
       <div class="sec"><h2>CREW <span class="chip" id="lb-count">${n}/${SEATS}</span></h2><button class="link" onclick="LOBBY.invite()">${I(P.userplus, '#F6D58A', 14, 2.6)} Invite</button></div>
       <div class="seatbar" id="lb-seatbar"></div>
       <div class="seats" id="lb-seats">${seatsHTML()}</div>
@@ -262,7 +274,8 @@
     shownPot = target;
   }
   function update() {
-    if (!screen().classList.contains('is-active') || !rendered) return;
+    if (!screen().classList.contains('is-active') || !rendered || (L.phase && L.phase !== 'waiting')) return;
+    const pk = $('#lb-picks'); if (pk) pk.innerHTML = GAME.picksCard();
     const keep = shownPot;
     $('#lb-pot').innerHTML = potHTML();
     $('#lb-pot-num').textContent = fmt(keep);
@@ -284,10 +297,25 @@
   window.LOBBY = {
     create,
     join,
+    // used by the game (js/game.js)
+    state: () => L,
+    persist: () => save(),
+    rerender() { rendered = false; if (screen().classList.contains('is-active')) LOBBY.onShow(); },
+    end() {
+      const code = L ? L.code : '';
+      L = null; rendered = false; save();
+      screen().innerHTML = '';
+      const tab = document.querySelector('#tabbar [data-go="matches"]'); if (tab) tab.classList.remove('has-lobby', 'is-live');
+      GAME.reset();
+      APP.go('matches');
+      if (code) toast(`Lobby #${code} is closed. See you next match!`);
+    },
+    h: { I, P, coinIc, status, rays, balance, chest, fmt, esc, crest, chatHTML: () => chatHTML(), send: (t) => send(t), say: (p, t) => say(p, t), scrollChat: () => scrollChat(), pot: () => pot(), QUICK },
     code: () => (L ? L.code : ''),
     isActive: () => !!L,
     onShow() {
       if (!L) return;
+      if (window.GAME && GAME.wants()) { rendered = false; GAME.show(); return; }
       if (!rendered || !screen().innerHTML) { shownPot = pot(); render(); } else update();
       const tab = document.querySelector('#tabbar [data-go="matches"]'); if (tab) tab.classList.add('has-lobby');
     },
@@ -321,7 +349,9 @@
         <div class="sh-btns"><button class="btn stay" onclick="LOBBY.closeSheet()">STAY</button><button class="btn go" onclick="LOBBY.confirmLeave()">LEAVE</button></div>`);
     },
     confirmLeave() {
+      if (L.phase && L.phase !== 'waiting') return;
       APP.addCoins(L.stake);
+      GAME.reset();
       // The party was not played, so it does not count in your stats.
       if (window.STATS) { STATS.add('matches', -1); if (me().host) STATS.add('hosted', -1); }
       const code = L.code;
