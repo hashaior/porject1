@@ -269,6 +269,7 @@
     renderPicks();
   }
   function renderPicks() {
+    saveScroll();
     const h = H(); const m = match();
     const done = PICKS.filter((pk) => draft[pk.id] !== undefined).length;
     const [hs, as] = draft.score.split('-').map(Number);
@@ -292,6 +293,7 @@
       <button class="gm-big" onclick="GAME.lockPicks()">${me().picks ? 'SAVE MY PICKS' : 'LOCK IN MY PICKS'}</button>
       <p class="gm-note">You can change your picks until kick-off.</p>
     </div>`;
+    restoreScroll();
   }
   function lockPicks() {
     const missing = PICKS.filter((pk) => !pk.score && draft[pk.id] === undefined);
@@ -334,13 +336,20 @@
   const flashes = {}; // player name -> {pts, until}
   const screen = () => document.getElementById('screen-lobby');
   const sig = {};
+  // Re-rendering replaces the page, so keep the scroll position (otherwise every tap jumps to the top).
+  let keepScroll = 0;
+  const saveScroll = () => { const sc = $('#gm-scroll') || $('#lb-scroll'); keepScroll = sc ? sc.scrollTop : 0; };
+  const restoreScroll = () => { const sc = $('#gm-scroll'); if (sc) sc.scrollTop = keepScroll; };
+  const exitBtn = () => `<div class="iconbtn exit" onclick="GAME.exit()" aria-label="Leave the match">${H().I(H().P.door, '#FF8A8E', 22, 2.4)}</div>`;
 
   function render() {
     const S = L(); if (!S) return;
+    saveScroll();
     Object.keys(sig).forEach((k) => delete sig[k]);
     if (S.phase === 'final') { renderFinal(); return; }
     const h = H(); const m = match(); const lg = LEAGUES[m.league];
     screen().innerHTML = `${h.rays}<div class="stadium-lights"><i></i><i></i></div><div class="scroll gm" id="gm-scroll">${h.status}
+      <div class="gm-bar"><span class="gm-bar-t">LIVE MATCH</span>${exitBtn()}</div>
       <div class="bc card">
         <div class="bc-top"><span class="lg" style="--dot:${lg.color}">${h.esc(lg.name)}</span><span class="bc-live"><i></i>LIVE</span><button class="speed" onclick="GAME.speed()" id="gm-speed">${S.game.speed}× SPEED</button></div>
         <div class="bc-mid">
@@ -365,6 +374,7 @@
       <div id="gm-tab"></div>
     </div>`;
     update(mt(), true);
+    restoreScroll();
   }
 
   function update(t, force) {
@@ -500,6 +510,7 @@
      FINAL (full time)
      ===================================================================== */
   function renderFinal() {
+    saveScroll();
     const S = L(); const h = H(); const m = match();
     const st = standings(END); const n = st.length; const sp = split(n); const pot = h.pot();
     const myI = st.findIndex((x) => x.p.you); const mine = st[myI];
@@ -514,6 +525,7 @@
     }).join('');
     const confetti = prize ? `<div class="confetti">${Array.from({ length: 26 }, (_, i) => `<i style="left:${(i * 37) % 100}%;animation-delay:${(i % 9) * 0.25}s;background:${['#F2B84B', '#8BEB6E', '#FF7A7F', '#7FD8FF', '#C9A2FF'][i % 5]}"></i>`).join('')}</div>` : '';
     screen().innerHTML = `${h.rays}${confetti}<div class="scroll gm" id="gm-scroll">${h.status}
+      <div class="gm-bar"><span class="gm-bar-t">FULL TIME</span>${exitBtn()}</div>
       <div class="lb-head"><div class="woodsign"><b>FULL TIME</b></div></div>
       <div class="ft-score card">${h.crest(m.home, 40)}<b>${h.esc(TEAMS[m.home][0])}</b><span class="digits">${s[0]} : ${s[1]}</span><b>${h.esc(TEAMS[m.away][0])}</b>${h.crest(m.away, 40)}</div>
       <div class="podium">${podium}</div>
@@ -528,6 +540,7 @@
       ${!prize || S.collected ? `<button class="gm-big" onclick="GAME.finish()">BACK TO MATCHES</button>` : ''}
       <p class="gm-note">This was a scripted demo match. Real matches will use live data.</p>
     </div>`;
+    restoreScroll();
   }
   function collect() {
     const S = L(); if (S.collected) return;
@@ -588,6 +601,13 @@
     },
     collect,
     finish,
+    exit() {
+      const S = L();
+      if (S.phase === 'final') { finish(); return; }
+      H().sheet('LEAVE THE MATCH?', `<p class="sh-text">The match has started, so your <b>${H().fmt(S.stake)} coins</b> entry stays in the pot and you can't win a prize. Your crew keeps playing without you.</p>
+        <div class="sh-btns"><button class="btn stay" onclick="LOBBY.closeSheet()">STAY</button><button class="btn go" onclick="GAME.confirmExit()">LEAVE</button></div>`);
+    },
+    confirmExit() { H().closeSheet(); hidePush(); view = null; LOBBY.end(); },
     reset() { view = null; lastT = null; seenRank = null; hidePush(); },
   };
 

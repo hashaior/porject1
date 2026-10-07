@@ -310,7 +310,7 @@
       APP.go('matches');
       if (code) toast(`Lobby #${code} is closed. See you next match!`);
     },
-    h: { I, P, coinIc, status, rays, balance, chest, fmt, esc, crest, chatHTML: () => chatHTML(), send: (t) => send(t), say: (p, t) => say(p, t), scrollChat: () => scrollChat(), pot: () => pot(), QUICK },
+    h: { I, P, coinIc, status, rays, balance, chest, fmt, esc, crest, chatHTML: () => chatHTML(), send: (t) => send(t), say: (p, t) => say(p, t), scrollChat: () => scrollChat(), pot: () => pot(), QUICK, sheet: (pl, b) => sheet(pl, b), closeSheet: () => closeSheet() },
     code: () => (L ? L.code : ''),
     isActive: () => !!L,
     onShow() {

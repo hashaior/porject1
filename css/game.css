@@ -236,3 +236,5 @@
 
 /* Matches tab while your match is live */
 #tabbar [data-go="matches"].is-live::after{background:#E5484D!important;width:12px!important;height:12px!important}
+#screen-lobby .gm-bar{display:flex;align-items:center;justify-content:space-between;padding:4px 16px 0}
+#screen-lobby .gm-bar-t{font:15px 'Lilita One';letter-spacing:.08em;color:#F6D58A}
